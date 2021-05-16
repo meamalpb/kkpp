@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/ben-jnr/kkpp#readme",
   "dependencies": {
+    "discord-buttons": "^1.0.3-beta",
     "discord.js": "^12.5.3",
     "dotenv": "^9.0.2"
   },
