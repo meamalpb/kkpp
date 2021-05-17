@@ -9,19 +9,19 @@ const embedModels = {
     ],
   },
 
+  emptyModel: {},
+
   checkDMModel: {
     title: "Pinged you",
   },
+
   errorModel: {
     title: "Invalid command",
   },
-  DisterrorModel : {
-    title : "Invalid district No."
 
+  districtErrorModel: {
+    title: "Invalid arguments",
   },
-  distModel : {
-  
-  }
 };
 
 module.exports = embedModels;
