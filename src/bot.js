@@ -7,6 +7,7 @@ const districts = require("./districts");
 const mssgParser = require("./messages/mssgParser");
 const cmdHandler = require("./messages/cmdHandler");
 const users = require("./helpers/model");
+
 client.on("ready", async () => {
   console.log(`${client.user.tag} is ready`);
   users.sync();
@@ -53,3 +54,4 @@ try {
 }
 const userslist = users.findAll({ attributes: ["username"] });
 console.log(`list:${userslist}`);*/
+

@@ -5,6 +5,7 @@ const errorText2 = "Enter only one number";
 const checkDMText = "check your DM for further details";
 const users = require("../helpers/model");
 const axios = require("axios");
+
 cmdHandler = (cmd, args, mssg, client) => {
   if ((cmd === "reg") | (cmd === "edit")) {
     if (!args.length) {
@@ -26,6 +27,7 @@ cmdHandler = (cmd, args, mssg, client) => {
     mssg.reply({ embed: model });
     return;
   }
+
   if (cmd === "checkdb") {
     axios
       .get("https://cdn-api.co-vin.in/api/v2/admin/location/districts/17", {
@@ -63,6 +65,7 @@ cmdHandler = (cmd, args, mssg, client) => {
       });
     return;
   }
+
   let model = embedModels.errorModel;
   model.description = `<@!${mssg.author.id}> \n\n ${errorText}`;
   mssg.reply({ embed: model });
