@@ -1,8 +1,16 @@
 const embedModels = require("./embedModels");
 const cmdDistrict = require("./commands/district");
-const cmdReg = require("./commands/reg");
+const cmdReg      = require("./commands/reg");
 
 cmdHandler = (cmd, args, mssg, client) => {
+
+  chnnel =(mssg) => {
+    if (mssg.channel.type !== "dm") {
+      return `<@!${mssg.author.id}>`;
+    }
+    return '';
+  }
+
   //if command is reg or edit
   if ((cmd === "reg") | (cmd === "edit")) {
     //if there are no args
@@ -11,13 +19,13 @@ cmdHandler = (cmd, args, mssg, client) => {
       return;
     }
 
-    //if args is not present
+    //if args is present
     else {
       mssg.reply({
         embed: embedModels(
           "general",
           "invalid arguments",
-          `<@!${mssg.author.id}>`
+          `${chnnel(mssg)}`
         ),
       });
       return;
@@ -32,7 +40,7 @@ cmdHandler = (cmd, args, mssg, client) => {
         embed: embedModels(
           "general",
           "Invalid arguments",
-          `<@!${mssg.author.id}>`
+          `${chnnel(mssg)}`
         ),
       });
       return;
@@ -50,7 +58,7 @@ cmdHandler = (cmd, args, mssg, client) => {
         embed: embedModels(
           "general",
           "Invalid arguments",
-          `<@!${mssg.author.id}>`
+          `${chnnel(mssg)}`
         ),
       });
       return;
@@ -63,7 +71,7 @@ cmdHandler = (cmd, args, mssg, client) => {
     embed: embedModels(
       "general",
       "Error!!",
-      `<@!${mssg.author.id}> \n\n type _help to find commands`
+      `${chnnel(mssg)} \n\n type _help to find commands`
     ),
   });
   return;

@@ -1,9 +1,16 @@
-const axios = require("axios");
-const districts = require("../../districts");
-const users = require("../../database/model");
-const embedModels = require("../embedModels");
+const axios         = require("axios");
+const districts     = require("../../districts");
+const users         = require("../../database/model");
+const embedModels   = require("../embedModels");
 
 cmdDistrict = (args, mssg) => {
+  chnnel =(mssg) => {
+    if (mssg.channel.type !== "dm") {
+      return `<@!${mssg.author.id}>`;
+    }
+    return '';
+  }
+
   //fetching district list
   axios
     .get("https://cdn-api.co-vin.in/api/v2/admin/location/districts/17", {
@@ -31,7 +38,7 @@ cmdDistrict = (args, mssg) => {
               embed: embedModels(
                 "general",
                 `Added district : ${districts[args - 1]}`,
-                `<@!${mssg.author.id}>`
+                `${chnnel(mssg)}`
               ),
             });
             return;
@@ -48,7 +55,7 @@ cmdDistrict = (args, mssg) => {
                   embed: embedModels(
                     "general",
                     `Updated district : ${districts[args - 1]}`,
-                    `<@!${mssg.author.id}>`
+                    `${chnnel(mssg)}`
                   ),
                 });
                 return;
