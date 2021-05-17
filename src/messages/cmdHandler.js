@@ -1,6 +1,7 @@
 const embedModels = require("./embedModels");
 const cmdDistrict = require("./commands/district");
-const cmdReg      = require("./commands/reg");
+const cmdReg = require("./commands/reg");
+const chnnel = require("./commands/dm");
 
 cmdHandler = (cmd, args, mssg, client) => {
 
@@ -48,7 +49,32 @@ cmdHandler = (cmd, args, mssg, client) => {
 
     //if arg gives a valid district
     else if ((parseInt(args[0]) > 0) & (parseInt(args[0]) < 15)) {
-      cmdDistrict(parseInt(args[0]), mssg);
+      cmdDistrict(cmd, parseInt(args[0]), mssg);
+      return;
+    }
+
+    //if arg is faulty
+    else {
+      mssg.reply({
+        embed: embedModels("general", "Invalid arguments", `${chnnel(mssg)}`),
+      });
+      return;
+    }
+  }
+
+  //for selecting age groups
+  else if (cmd === "group") {
+    // if more than 1 arg is provided
+    if ((args.length > 1) | (args.length < 1)) {
+      mssg.reply({
+        embed: embedModels("general", "Invalid arguments", `${chnnel(mssg)}`),
+      });
+      return;
+    }
+
+    //if arg gives a valid district
+    else if ((parseInt(args[0]) > 0) & (parseInt(args[0]) < 3)) {
+      cmdDistrict(cmd, parseInt(args[0]), mssg);
       return;
     }
 
@@ -65,6 +91,30 @@ cmdHandler = (cmd, args, mssg, client) => {
     }
   }
 
+  //for selecting pin
+  else if (cmd === "pin") {
+    // if more than 1 arg is provided
+    if ((args.length > 1) | (args.length < 1)) {
+      mssg.reply({
+        embed: embedModels("general", "Invalid arguments", `${chnnel(mssg)}`),
+      });
+      return;
+    }
+
+    //if arg gives a valid district
+    else if (args[0].length == 6) {
+      cmdDistrict(cmd, args[0], mssg);
+      return;
+    }
+
+    //if arg is faulty
+    else {
+      mssg.reply({
+        embed: embedModels("general", "Invalid arguments", `${chnnel(mssg)}`),
+      });
+      return;
+    }
+  }
   //if no such command exists
   let model = embedModels.errorModel;
   mssg.reply({
