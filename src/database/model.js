@@ -11,10 +11,9 @@ const users = connection.define("users", {
   },
   district_id: {
     type: sequelize.INTEGER,
-    allowNull: false,
   },
   age_group: {
-    type: sequelize.INTEGER,
+    type: sequelize.STRING,
   },
   pin: {
     type: sequelize.STRING,
