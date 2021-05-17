@@ -49,6 +49,7 @@ cmdDistrict = async (cmd, args, mssg) => {
                   `${chnnel(mssg)}`
                 ),
               });
+
               return;
             }
 

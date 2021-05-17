@@ -2,7 +2,16 @@ const embedModels = require("./embedModels");
 const cmdDistrict = require("./commands/district");
 const cmdReg = require("./commands/reg");
 const chnnel = require("./commands/dm");
+
 cmdHandler = (cmd, args, mssg, client) => {
+
+  chnnel =(mssg) => {
+    if (mssg.channel.type !== "dm") {
+      return `<@!${mssg.author.id}>`;
+    }
+    return '';
+  }
+
   //if command is reg or edit
   if ((cmd === "reg") | (cmd === "edit")) {
     //if there are no args
@@ -11,10 +20,14 @@ cmdHandler = (cmd, args, mssg, client) => {
       return;
     }
 
-    //if args is not present
+    //if args is present
     else {
       mssg.reply({
-        embed: embedModels("general", "invalid arguments", `${chnnel(mssg)}`),
+        embed: embedModels(
+          "general",
+          "invalid arguments",
+          `${chnnel(mssg)}`
+        ),
       });
       return;
     }
@@ -25,7 +38,11 @@ cmdHandler = (cmd, args, mssg, client) => {
     // if more than 1 arg is provided
     if ((args.length > 1) | (args.length < 1)) {
       mssg.reply({
-        embed: embedModels("general", "Invalid arguments", `${chnnel(mssg)}`),
+        embed: embedModels(
+          "general",
+          "Invalid arguments",
+          `${chnnel(mssg)}`
+        ),
       });
       return;
     }
@@ -64,7 +81,11 @@ cmdHandler = (cmd, args, mssg, client) => {
     //if arg is faulty
     else {
       mssg.reply({
-        embed: embedModels("general", "Invalid arguments", `${chnnel(mssg)}`),
+        embed: embedModels(
+          "general",
+          "Invalid arguments",
+          `${chnnel(mssg)}`
+        ),
       });
       return;
     }

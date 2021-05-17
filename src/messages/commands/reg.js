@@ -1,4 +1,4 @@
-const districts = require("../../districts");
+const districts   = require("../../districts");
 const embedModels = require("../embedModels");
 const chnnel = require("./dm");
 cmdReg = (mssg, client) => {
