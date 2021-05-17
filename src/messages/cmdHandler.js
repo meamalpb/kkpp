@@ -6,7 +6,10 @@ const checkDMText = "check your DM for further details";
 const users = require("../helpers/model");
 const axios = require("axios");
 
+
 cmdHandler = (cmd, args, mssg, client) => {
+
+  //if command is reg
   if ((cmd === "reg") | (cmd === "edit")) {
     if (!args.length) {
       let desc = "\n";
@@ -24,6 +27,21 @@ cmdHandler = (cmd, args, mssg, client) => {
 
     let model = embedModels.errorModel;
     model.description = `<@!${mssg.author.id}> \n\n ${errorText}`;
+    mssg.reply({ embed: model });
+    return;
+  }
+
+
+  //for selecting districts
+  if (cmd === "dist") {
+    if (parseInt(args)>0 & parseInt(args)<15) {
+      let model = embedModels.distModel;
+      model.title = `${districts[args-1]} selected`;
+      mssg.reply({ embed: model });
+      return;
+    }
+    //when args are not in between 1-14
+    let model = embedModels.DisterrorModel;
     mssg.reply({ embed: model });
     return;
   }
