@@ -59,7 +59,16 @@ cmdHandler = (cmd, args, mssg, client) => {
                 return;
               } catch (e) {
                 if (e.name === "SequelizeUniqueConstraintError") {
-                  mssg.reply("That username already exists.");
+                  const rows = await users.update(
+                    { district: dname, district_id: did },
+                    { where: { username: uid } }
+                  );
+                  if (rows > 0) {
+                    let model = embedModels.emptyModel;
+                    model.title = `${districts[args - 1]} updated`;
+                    return mssg.reply({ embed: model });
+                  }
+                  return mssg.reply("error!!");
                 }
                 console.log("error is" + e.name);
               }

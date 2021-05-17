@@ -102,3 +102,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Ignore the default SQLite database.
+/database/*.sqlite
