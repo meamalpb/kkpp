@@ -1,9 +1,10 @@
-const Discord       = require("discord.js");
-const mssgParser    = require("./messages/mssgParser");
-const cmdHandler    = require("./messages/cmdHandler");
-const client        = new Discord.Client();
-const users         = require("./database/model");
+const Discord = require("discord.js");
+const client = new Discord.Client();
 require("dotenv").config();
+
+const mssgParser = require("./messages/mssgParser");
+const cmdHandler = require("./messages/cmdHandler");
+const users = require("./database/model");
 
 //runs when client is ready
 client.on("ready", async () => {

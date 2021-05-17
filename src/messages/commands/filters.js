@@ -1,20 +1,20 @@
-const fetchdata = require("./fetchapi");
+const fetchApi = require("../helper/fetchApi");
 const districts = require("../../districts");
 const users = require("../../database/model");
 const embedModels = require("../embedModels");
 const age = ["18-45", "Above 45"];
-const chnnel = require("./dm");
-cmdDistrict = async (cmd, args, mssg) => {
+const dmOrNot = require("../helper/dmOrNot");
+
+filters = async (cmd, arg, mssg) => {
   if (cmd === "district") {
     //fetching district list
-    const apidata = await fetchdata(
+    let data = await fetchApi(
       "https://cdn-api.co-vin.in/api/v2/admin/location/districts/17"
     );
-    data = apidata.districts;
-    console.log(data);
+    data = data.districts;
     for (i = 0; i < data.length; i++) {
       //find selected district
-      if (data[i].district_name === districts[args - 1]) {
+      if (data[i].district_name === districts[arg - 1]) {
         const did = data[i].district_id;
         const dname = data[i].district_name;
         const uid = mssg.author.id;
@@ -28,8 +28,8 @@ cmdDistrict = async (cmd, args, mssg) => {
           mssg.reply({
             embed: embedModels(
               "general",
-              `Added district : ${districts[args - 1]}`,
-              `${chnnel(mssg)}`
+              `Added district : ${districts[arg - 1]}`,
+              `${dmOrNot(mssg)}`
             ),
           });
           return;
@@ -45,8 +45,8 @@ cmdDistrict = async (cmd, args, mssg) => {
               mssg.reply({
                 embed: embedModels(
                   "general",
-                  `Updated district : ${districts[args - 1]}`,
-                  `${chnnel(mssg)}`
+                  `Updated district : ${districts[arg - 1]}`,
+                  `${dmOrNot(mssg)}`
                 ),
               });
 
@@ -62,7 +62,7 @@ cmdDistrict = async (cmd, args, mssg) => {
     }
   } else if (cmd === "group") {
     const uid = mssg.author.id;
-    const agegroup = age[args - 1];
+    const agegroup = age[arg - 1];
     try {
       //insert user into db along with district_id
       await users.create({
@@ -72,8 +72,8 @@ cmdDistrict = async (cmd, args, mssg) => {
       mssg.reply({
         embed: embedModels(
           "general",
-          `Added age group : ${age[args - 1]}`,
-          `${chnnel(mssg)}`
+          `Added age group : ${age[arg - 1]}`,
+          `${dmOrNot(mssg)}`
         ),
       });
       return;
@@ -89,8 +89,8 @@ cmdDistrict = async (cmd, args, mssg) => {
           mssg.reply({
             embed: embedModels(
               "general",
-              `Updated age group : ${age[args - 1]}`,
-              `${chnnel(mssg)}`
+              `Updated age group : ${age[arg - 1]}`,
+              `${dmOrNot(mssg)}`
             ),
           });
           return;
@@ -107,17 +107,17 @@ cmdDistrict = async (cmd, args, mssg) => {
       //insert user into db along with district_id
       await users.create({
         username: uid,
-        pin: args,
+        pin: arg,
       });
       mssg.reply({
-        embed: embedModels("general", `Added pin : ${args}`, `${chnnel(mssg)}`),
+        embed: embedModels("general", `Added pin : ${arg}`, `${chnnel(mssg)}`),
       });
       return;
     } catch (e) {
       //if user has already selected a district
       if (e.name === "SequelizeUniqueConstraintError") {
         const rows = await users.update(
-          { pin: args },
+          { pin: arg },
           { where: { username: uid } }
         );
         // if data updated
@@ -125,8 +125,8 @@ cmdDistrict = async (cmd, args, mssg) => {
           mssg.reply({
             embed: embedModels(
               "general",
-              `Updated pin: ${args}`,
-              `${chnnel(mssg)}`
+              `Updated pin: ${arg}`,
+              `${dmOrNot(mssg)}`
             ),
           });
           return;
@@ -140,4 +140,4 @@ cmdDistrict = async (cmd, args, mssg) => {
   }
 };
 
-module.exports = cmdDistrict;
+module.exports = filters;
