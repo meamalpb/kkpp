@@ -20,10 +20,10 @@
   "homepage": "https://github.com/ben-jnr/kkpp#readme",
   "dependencies": {
     "axios": "^0.21.1",
-    "discord-buttons": "^1.0.3-beta",
     "discord.js": "^12.5.3",
     "dotenv": "^9.0.2",
-    "node-fetch": "^2.6.1"
+    "sequelize": "^6.6.2",
+    "sqlite3": "^5.0.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
