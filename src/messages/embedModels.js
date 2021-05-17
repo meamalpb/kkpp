@@ -12,10 +12,16 @@ const embedModels = {
   checkDMModel: {
     title: "Pinged you",
   },
-
   errorModel: {
     title: "Invalid command",
   },
+  DisterrorModel : {
+    title : "Invalid district No."
+
+  },
+  distModel : {
+  
+  }
 };
 
 module.exports = embedModels;
