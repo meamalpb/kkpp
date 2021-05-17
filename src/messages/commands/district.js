@@ -30,7 +30,7 @@ cmdDistrict = (args, mssg) => {
             mssg.reply({
               embed: embedModels(
                 "general",
-                `Added district : ${districts[args + 1]}`,
+                `Added district : ${districts[args - 1]}`,
                 `<@!${mssg.author.id}>`
               ),
             });
@@ -47,7 +47,7 @@ cmdDistrict = (args, mssg) => {
                 mssg.reply({
                   embed: embedModels(
                     "general",
-                    `Updated district : ${districts[args + 1]}`,
+                    `Updated district : ${districts[args - 1]}`,
                     `<@!${mssg.author.id}>`
                   ),
                 });
