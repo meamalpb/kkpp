@@ -1,127 +1,73 @@
 const embedModels = require("./embedModels");
-const cmdDistrict = require("./commands/district");
-const cmdReg = require("./commands/reg");
-const chnnel = require("./commands/dm");
+const filters = require("./commands/filters");
+const menu = require("./commands/menu");
+const dmOrNot = require("./helper/dmOrNot");
+const { isNumber } = require("lodash");
 
 cmdHandler = (cmd, args, mssg, client) => {
-
-  chnnel =(mssg) => {
-    if (mssg.channel.type !== "dm") {
-      return `<@!${mssg.author.id}>`;
-    }
-    return '';
-  }
-
-  //if command is reg or edit
-  if ((cmd === "reg") | (cmd === "edit")) {
+  //if command is filter
+  if (cmd === "filter") {
     //if there are no args
     if (!args.length) {
-      cmdReg(mssg, client);
+      menu(mssg, client);
       return;
     }
 
     //if args is present
     else {
       mssg.reply({
-        embed: embedModels(
-          "general",
-          "invalid arguments",
-          `${chnnel(mssg)}`
-        ),
+        embed: embedModels("general", "invalid arguments", `${dmOrNot(mssg)}`),
       });
       return;
     }
   }
 
-  //for selecting districts
-  else if (cmd === "district") {
+  //if command = districts | age group | pincode
+  else if ((cmd === "district") | (cmd === "pin") | (cmd === "group")) {
     // if more than 1 arg is provided
     if ((args.length > 1) | (args.length < 1)) {
       mssg.reply({
-        embed: embedModels(
-          "general",
-          "Invalid arguments",
-          `${chnnel(mssg)}`
-        ),
+        embed: embedModels("general", "Invalid arguments", `${dmOrNot(mssg)}`),
       });
       return;
     }
 
+    let arg = parseInt(args[0]);
+
     //if arg gives a valid district
-    else if ((parseInt(args[0]) > 0) & (parseInt(args[0]) < 15)) {
-      cmdDistrict(cmd, parseInt(args[0]), mssg);
+    if ((cmd === "district") & (arg > 0) & (arg < 15)) {
+      filters(cmd, arg, mssg);
+      return;
+    }
+
+    //if arg gives a valid age group
+    if ((cmd === "group") & (arg > 0) & (arg < 3)) {
+      filters(cmd, arg, mssg);
+      return;
+    }
+
+    //if arg gives a valid pincode
+    if ((cmd === "pin") & (args[0].length === 6)) {
+      filters(cmd, args[0], mssg);
       return;
     }
 
     //if arg is faulty
     else {
       mssg.reply({
-        embed: embedModels("general", "Invalid arguments", `${chnnel(mssg)}`),
+        embed: embedModels("general", "Invalid arguments", `${dmOrNot(mssg)}`),
       });
       return;
     }
   }
 
-  //for selecting age groups
-  else if (cmd === "group") {
-    // if more than 1 arg is provided
-    if ((args.length > 1) | (args.length < 1)) {
-      mssg.reply({
-        embed: embedModels("general", "Invalid arguments", `${chnnel(mssg)}`),
-      });
-      return;
-    }
-
-    //if arg gives a valid district
-    else if ((parseInt(args[0]) > 0) & (parseInt(args[0]) < 3)) {
-      cmdDistrict(cmd, parseInt(args[0]), mssg);
-      return;
-    }
-
-    //if arg is faulty
-    else {
-      mssg.reply({
-        embed: embedModels(
-          "general",
-          "Invalid arguments",
-          `${chnnel(mssg)}`
-        ),
-      });
-      return;
-    }
-  }
-
-  //for selecting pin
-  else if (cmd === "pin") {
-    // if more than 1 arg is provided
-    if ((args.length > 1) | (args.length < 1)) {
-      mssg.reply({
-        embed: embedModels("general", "Invalid arguments", `${chnnel(mssg)}`),
-      });
-      return;
-    }
-
-    //if arg gives a valid district
-    else if (args[0].length == 6) {
-      cmdDistrict(cmd, args[0], mssg);
-      return;
-    }
-
-    //if arg is faulty
-    else {
-      mssg.reply({
-        embed: embedModels("general", "Invalid arguments", `${chnnel(mssg)}`),
-      });
-      return;
-    }
-  }
   //if no such command exists
   let model = embedModels.errorModel;
   mssg.reply({
     embed: embedModels(
       "general",
       "Error!!",
-      `${chnnel(mssg)} \n\n type _help to find commands`
+      `${dmOrNot(mssg)} \n\n type _help to find commands`
     ),
   });
   return;

@@ -1,6 +1,6 @@
 embedModels = (type, title, desc) => {
-  //reg or edit message model
-  if (type === "reg") {
+  //district menu message model
+  if (type === "district") {
     return {
       title: "District List",
       description: `${desc}`,
@@ -12,8 +12,9 @@ embedModels = (type, title, desc) => {
       ],
     };
   }
-  //reg or edit age group message model
-  else if (type === "regage") {
+
+  //age_group menu message model
+  else if (type === "age") {
     return {
       title: "Age Groups",
       description: `${desc}`,
@@ -25,8 +26,9 @@ embedModels = (type, title, desc) => {
       ],
     };
   }
-  //reg or edit pin message model
-  else if (type === "regpin") {
+
+  //pine menu message model
+  else if (type === "pin") {
     return {
       title: "PIN",
       description: `${desc}`,

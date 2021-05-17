@@ -1,7 +1,8 @@
-const districts   = require("../../districts");
+const districts = require("../../districts");
 const embedModels = require("../embedModels");
-const chnnel = require("./dm");
-cmdReg = (mssg, client) => {
+const dmOrNot = require("../helper/dmOrNot");
+
+menu = (mssg, client) => {
   let desc1 = "\n";
   let desc2 = "\n";
   let age = ["18-45", "Above 45"];
@@ -14,7 +15,7 @@ cmdReg = (mssg, client) => {
   //send DM about reg details
   client.users.cache
     .get(mssg.author.id)
-    .send({ embed: embedModels("reg", "", desc1) });
+    .send({ embed: embedModels("district", "", desc1) });
 
   //generating age group list
   for (let i = 0; i < age.length; i++) {
@@ -24,12 +25,12 @@ cmdReg = (mssg, client) => {
   //send DM about age group details
   client.users.cache
     .get(mssg.author.id)
-    .send({ embed: embedModels("regage", "", desc2) });
+    .send({ embed: embedModels("age", "", desc2) });
 
   //send DM about pincode details
   client.users.cache
     .get(mssg.author.id)
-    .send({ embed: embedModels("regpin", "", pin) });
+    .send({ embed: embedModels("pin", "", pin) });
 
   //respond in channel
   if (mssg.channel.type !== "dm") {
@@ -37,11 +38,11 @@ cmdReg = (mssg, client) => {
       embed: embedModels(
         "general",
         "Pinged you",
-        `${chnnel(mssg)} \n\n Check DM for further details`
+        `${dmOrNot(mssg)} \n\n Check DM for further details`
       ),
     });
   }
   return;
 };
 
-module.exports = cmdReg;
+module.exports = menu;
