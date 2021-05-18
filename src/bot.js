@@ -1,5 +1,7 @@
 const Discord = require("discord.js");
-const client = new Discord.Client();
+const client = new Discord.Client({
+  ws: { intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES"] },
+});
 require("dotenv").config();
 
 const mssgParser = require("./messages/mssgParser");
@@ -10,6 +12,10 @@ const users = require("./database/model");
 client.on("ready", async () => {
   console.log(`${client.user.tag} is ready`);
   users.sync();
+});
+
+client.on("guildMemberRemove", async (member) => {
+  console.log(member.user.id);
 });
 
 //runs on user input
