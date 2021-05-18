@@ -5,11 +5,19 @@ const dmOrNot = require("./helper/dmOrNot");
 const { isNumber } = require("lodash");
 const users = require("../database/model");
 const checkfilter = require("./commands/checkfilter");
+const insert = require("../database/insert");
+
 cmdHandler = async (cmd, args, mssg, client) => {
   //if command is filter
-  if (cmd === "filter") {
+  if (cmd === "register") {
     //if there are no args
     if (!args.length) {
+      let data = await insert(mssg);
+      if (data instanceof Error) {
+        if (data.name === "SequelizeUniqueConstraintError")
+          console.log("User already registered");
+        else console.log(data.name);
+      }
       menu(mssg, client);
       return;
     }

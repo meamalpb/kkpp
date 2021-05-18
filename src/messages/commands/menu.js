@@ -38,7 +38,8 @@ menu = (mssg, client) => {
       embed: embedModels(
         "general",
         "Pinged you",
-        `${dmOrNot(mssg)} \n\n Check DM for further details`
+        `${dmOrNot(mssg)} 
+        \nYou are registered \n Check DM for further details`
       ),
     });
   }
