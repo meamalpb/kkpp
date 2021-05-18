@@ -2,13 +2,19 @@ const embedModels = require("./embedModels");
 const filters = require("./commands/filters");
 const menu = require("./commands/menu");
 const dmOrNot = require("./helper/dmOrNot");
-const { isNumber } = require("lodash");
+const insert = require("../database/insert");
 
-cmdHandler = (cmd, args, mssg, client) => {
+cmdHandler = async (cmd, args, mssg, client) => {
   //if command is filter
-  if (cmd === "filter") {
+  if (cmd === "register") {
     //if there are no args
     if (!args.length) {
+      let data = await insert(mssg);
+      if (data instanceof Error) {
+        if (data.name === "SequelizeUniqueConstraintError")
+          console.log("User already registered");
+        else console.log(data.name);
+      }
       menu(mssg, client);
       return;
     }
