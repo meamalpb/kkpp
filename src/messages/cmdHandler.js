@@ -2,6 +2,9 @@ const embedModels = require("./embedModels");
 const filters = require("./commands/filters");
 const menu = require("./commands/menu");
 const dmOrNot = require("./helper/dmOrNot");
+const { isNumber } = require("lodash");
+const users = require("../database/model");
+const checkfilter = require("./commands/checkfilter");
 const insert = require("../database/insert");
 
 cmdHandler = async (cmd, args, mssg, client) => {
@@ -65,6 +68,28 @@ cmdHandler = async (cmd, args, mssg, client) => {
       });
       return;
     }
+  } else if (cmd === "checkd" || cmd === "checkda") {
+    const district = await users.findOne({
+      where: { username: mssg.author.id },
+    });
+    if (district) {
+      const m = district.get("district_id");
+      const n = district.get("age_group");
+      checkfilter(mssg, cmd, m, n);
+      return;
+    }
+    return mssg.channel.send(`could not find`);
+  } else if (cmd === "checkp" || cmd === "checkpa") {
+    const pinc = await users.findOne({
+      where: { username: mssg.author.id },
+    });
+    if (pinc) {
+      const m = pinc.get("pin");
+      const n = pinc.get("age_group");
+      checkfilter(mssg, cmd, m, n);
+      return;
+    }
+    return mssg.channel.send(`could not find`);
   }
 
   //if no such command exists
