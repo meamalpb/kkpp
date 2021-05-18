@@ -39,6 +39,11 @@ embedModels = (type, title, desc) => {
         },
       ],
     };
+  } else if (type === "check") {
+    return {
+      title: "Available vaccination centres for the next week",
+      description: `${desc}`,
+    };
   }
   //general message model
   else if (type === "general") {
