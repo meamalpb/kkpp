@@ -5,8 +5,8 @@ const dmOrNot = require("../messages/helper/dmOrNot");
 const update = {
   //function to update a district
   update_district: async (did, dname, uid, mssg, arg) => {
-    let data = "";
     try {
+      //update query
       const rows = await users.update(
         { district: dname, district_id: did },
         { where: { username: uid } }
@@ -21,10 +21,10 @@ const update = {
             `${dmOrNot(mssg)}`
           ),
         });
-        data = true;
+        console.log(`${mssg.author.id} : updated district to ${dname}`);
       }
 
-      //if data not updated
+      //if user not registered
       else {
         mssg.reply({
           embed: embedModels(
@@ -33,13 +33,23 @@ const update = {
             `${dmOrNot(mssg)} \n\n use command : _register`
           ),
         });
-        data = new Error("No rows found");
+        console.log(`${mssg.author.id} : user not registered`);
       }
     } catch (e) {
-      data = e;
+      //if error
+      console.log(`${mssg.author.id} : ${e}`);
+      mssg.reply({
+        embed: embedModels(
+          "general",
+          `Server Error`,
+          `${dmOrNot(mssg)} \n\n Unable to update district`
+        ),
+      });
     }
+
+    //return a promise
     return new Promise((resolve) => {
-      resolve(data);
+      resolve();
     });
   },
 
@@ -60,10 +70,9 @@ const update = {
             `${dmOrNot(mssg)}`
           ),
         });
-        data = true;
       }
 
-      //if data not updated
+      //if user is not registered
       else {
         mssg.reply({
           embed: embedModels(
@@ -72,13 +81,20 @@ const update = {
             `${dmOrNot(mssg)} \n\n use command : _register`
           ),
         });
-        data = new Error("No rows found");
       }
     } catch (e) {
-      data = e;
+      //if error
+      console.log(`${mssg.author.id} : ${e}`);
+      mssg.reply({
+        embed: embedModels(
+          "general",
+          `Server Error`,
+          `${dmOrNot(mssg)} \n\n Unable to update age group`
+        ),
+      });
     }
     return new Promise((resolve) => {
-      resolve(data);
+      resolve();
     });
   },
 
@@ -99,7 +115,6 @@ const update = {
             `${dmOrNot(mssg)}`
           ),
         });
-        data = true;
       }
 
       //if data not updated
@@ -111,13 +126,19 @@ const update = {
             `${dmOrNot(mssg)} \n\n use command : _register`
           ),
         });
-        data = new Error("No rows found");
       }
     } catch (e) {
-      data = e;
+      //if  error
+      mssg.reply({
+        embed: embedModels(
+          "general",
+          `Server Error`,
+          `${dmOrNot(mssg)} \n\n Unable to update pincode`
+        ),
+      });
     }
     return new Promise((resolve) => {
-      resolve(data);
+      resolve();
     });
   },
 };

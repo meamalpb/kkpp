@@ -11,44 +11,17 @@ cmdHandler = async (cmd, args, mssg, client) => {
   if (cmd === "register") {
     //if there are no args
     if (!args.length) {
-      let data = await insert(mssg);
-      if (data instanceof Error) {
-        //if user already registered
-        if (data.name === "SequelizeUniqueConstraintError") {
-          console.log(`${mssg.author.id} : already registered`);
-          mssg.reply({
-            embed: embedModels(
-              "general",
-              "Already registered",
-              `${dmOrNot(mssg)} \n\nYou are already registered `
-            ),
-          });
-        }
-
-        //some other error
-        else console.log(`${mssg.author.id} : ${data.name}`);
-        return;
-      }
-
-      //user registered
-      console.log(`${mssg.author.id} : registered`);
-      mssg.reply({
-        embed: embedModels(
-          "general",
-          "Registered",
-          `${dmOrNot(mssg)} \n\nRegistration successful. Welcome onboard.`
-        ),
-      });
+      await insert(mssg);
       return;
     }
 
-    //if args is present
+    //if args are present
     else {
       console.log(
         `${mssg.author.id} : args are not allowed with command - ${cmd}`
       );
       mssg.reply({
-        embed: embedModels("general", "invalid arguments", `${dmOrNot(mssg)}`),
+        embed: embedModels("general", "Invalid arguments", `${dmOrNot(mssg)}`),
       });
       return;
     }
@@ -56,8 +29,21 @@ cmdHandler = async (cmd, args, mssg, client) => {
 
   //if command is to print menu
   else if (cmd === "menu") {
-    menu(mssg, client);
-    return;
+    if (!args.length) {
+      menu(mssg, client);
+      return;
+    }
+
+    //if args are present
+    else {
+      console.log(
+        `${mssg.author.id} : args are not allowed with command - ${cmd}`
+      );
+      mssg.reply({
+        embed: embedModels("general", "Invalid arguments", `${dmOrNot(mssg)}`),
+      });
+      return;
+    }
   }
 
   //if command = districts | age group | pincode
