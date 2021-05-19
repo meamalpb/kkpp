@@ -29,7 +29,7 @@ const update = {
         mssg.reply({
           embed: embedModels(
             "general",
-            `User not Registerd`,
+            `User not Registered`,
             `${dmOrNot(mssg)} \n\n use command : _register`
           ),
         });
@@ -68,7 +68,7 @@ const update = {
         mssg.reply({
           embed: embedModels(
             "general",
-            `User not Registerd`,
+            `User not Registered`,
             `${dmOrNot(mssg)} \n\n use command : _register`
           ),
         });
@@ -107,7 +107,7 @@ const update = {
         mssg.reply({
           embed: embedModels(
             "general",
-            `User not Registerd `,
+            `User not Registered `,
             `${dmOrNot(mssg)} \n\n use command : _register`
           ),
         });

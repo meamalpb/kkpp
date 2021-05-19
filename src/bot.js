@@ -12,13 +12,10 @@ client.on("ready", async () => {
   users.sync();
 });
 
-client.on("guildMemberRemove", async (member) => {
-  console.log(member.user.id);
-});
-
 //runs on user input
 client.on("message", async (message) => {
   if (message.author.bot) return;
+  console.log(`${message.author.id} : ${message.content}`);
   [cmd, args] = mssgParser(message);
   if (cmd) {
     cmdHandler(cmd, args, message, client);
