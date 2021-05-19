@@ -1,16 +1,36 @@
 const axios = require("axios");
+const embedModels = require("../embedModels");
 
-getInfo = async (api) => {
-  let result = await axios.get(api, {
-    headers: {
-      "User-Agent":
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:89.0) Gecko/20100101 Firefox/89.0",
-    },
-  });
-  result = result.data;
-  return new Promise((resolve, reject) => {
-    if (result) resolve(result);
-  });
+getInfo = async (api, mssg) => {
+  try {
+    let result = await axios.get(api, {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:89.0) Gecko/20100101 Firefox/89.0",
+      },
+    });
+    result = result.data;
+
+    //returning a promise
+    return new Promise((resolve) => {
+      resolve(result);
+    });
+  } catch (e) {
+    //error printed
+    console.log(`${mssg.author.id} : ${e}`);
+
+    //replying with error
+    mssg.reply({
+      embed: embedModels(
+        "general",
+        "Server Error",
+        `${dmOrNot(mssg)} \n\nUnable to fetch from API `
+      ),
+    });
+    return new Promise((resolve) => {
+      resolve(false);
+    });
+  }
 };
 
 module.exports = getInfo;
