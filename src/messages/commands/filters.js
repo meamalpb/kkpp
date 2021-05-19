@@ -42,7 +42,7 @@ filters = async (cmd, arg, mssg) => {
   if (cmd === "pin") {
     const uid = mssg.author.id;
 
-    let res = await update.update_pin(uid, arg, mssg);
+    let res = await update.update_pin(uid, mssg, arg);
     if (res instanceof Error) console.log(res.name);
     return;
   }
