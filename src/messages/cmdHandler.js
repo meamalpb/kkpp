@@ -1,10 +1,9 @@
 const embedModels = require("./embedModels");
 const filters = require("./commands/filters");
 const menu = require("./commands/menu");
-const dmOrNot = require("./helper/dmOrNot");
-const { isNumber } = require("lodash");
-const users = require("../database/model");
 const checkfilter = require("./commands/checkfilter");
+const dmOrNot = require("./helper/dmOrNot");
+const users = require("../database/model");
 const insert = require("../database/insert");
 
 cmdHandler = async (cmd, args, mssg, client) => {
@@ -14,16 +13,40 @@ cmdHandler = async (cmd, args, mssg, client) => {
     if (!args.length) {
       let data = await insert(mssg);
       if (data instanceof Error) {
-        if (data.name === "SequelizeUniqueConstraintError")
-          console.log("User already registered");
-        else console.log(data.name);
+        //if user already registered
+        if (data.name === "SequelizeUniqueConstraintError") {
+          console.log(`${mssg.author.id} : already registered`);
+          mssg.reply({
+            embed: embedModels(
+              "general",
+              "Already registered",
+              `${dmOrNot(mssg)} \n\nYou are already registered `
+            ),
+          });
+        }
+
+        //some other error
+        else console.log(`${mssg.author.id} : ${data.name}`);
+        return;
       }
-      menu(mssg, client);
+
+      //user registered
+      console.log(`${mssg.author.id} : registered`);
+      mssg.reply({
+        embed: embedModels(
+          "general",
+          "Registered",
+          `${dmOrNot(mssg)} \n\nRegistration successful. Welcome onboard.`
+        ),
+      });
       return;
     }
 
     //if args is present
     else {
+      console.log(
+        `${mssg.author.id} : args are not allowed with command - ${cmd}`
+      );
       mssg.reply({
         embed: embedModels("general", "invalid arguments", `${dmOrNot(mssg)}`),
       });
@@ -31,10 +54,17 @@ cmdHandler = async (cmd, args, mssg, client) => {
     }
   }
 
+  //if command is to print menu
+  else if (cmd === "menu") {
+    menu(mssg, client);
+    return;
+  }
+
   //if command = districts | age group | pincode
   else if ((cmd === "district") | (cmd === "pin") | (cmd === "group")) {
     // if more than 1 arg is provided
     if ((args.length > 1) | (args.length < 1)) {
+      console.log(`${mssg.author.id} : arguments invalid for command - ${cmd}`);
       mssg.reply({
         embed: embedModels("general", "Invalid arguments", `${dmOrNot(mssg)}`),
       });
@@ -63,41 +93,72 @@ cmdHandler = async (cmd, args, mssg, client) => {
 
     //if arg is faulty
     else {
+      console.log(
+        `${mssg.author.id} : arguments are invalid for command - ${cmd}`
+      );
       mssg.reply({
         embed: embedModels("general", "Invalid arguments", `${dmOrNot(mssg)}`),
       });
       return;
     }
-  } else if (cmd === "checkd" || cmd === "checkda") {
-    const district = await users.findOne({
+  }
+
+  //command to search for available slots based on district
+  else if (cmd === "checkd" || cmd === "checkda") {
+    const row = await users.findOne({
       where: { username: mssg.author.id },
     });
-    if (district) {
-      const m = district.get("district_id");
-      const n = district.get("age_group");
-      checkfilter(mssg, cmd, m, n);
+    //if user exists
+    if (row) {
+      const did = row.get("district_id");
+      const group = row.get("age_group");
+      checkfilter(mssg, cmd, did, group);
       return;
     }
-    return mssg.channel.send(`could not find`);
-  } else if (cmd === "checkp" || cmd === "checkpa") {
-    const pinc = await users.findOne({
+
+    //if user is not registered
+    console.log(`${mssg.author.id} : user not registered`);
+    mssg.reply({
+      embed: embedModels(
+        "general",
+        "User not registered",
+        `${dmOrNot(mssg)}\n\nUse command : _register`
+      ),
+    });
+    return;
+  }
+
+  //command to search for slots based on pin
+  else if (cmd === "checkp" || cmd === "checkpa") {
+    const row = await users.findOne({
       where: { username: mssg.author.id },
     });
-    if (pinc) {
-      const m = pinc.get("pin");
-      const n = pinc.get("age_group");
-      checkfilter(mssg, cmd, m, n);
+    //if user exists
+    if (row) {
+      const pin = row.get("pin");
+      const group = row.get("age_group");
+      checkfilter(mssg, cmd, pin, group);
       return;
     }
-    return mssg.channel.send(`could not find`);
+
+    //if user is not registered
+    console.log(`${mssg.author.id} : user not registered`);
+    mssg.reply({
+      embed: embedModels(
+        "general",
+        "User not registered",
+        `${dmOrNot(mssg)}\n\nUse command : _register`
+      ),
+    });
+    return;
   }
 
   //if no such command exists
-  let model = embedModels.errorModel;
+  console.log(`${mssg.author.id} : command ${cmd} does not exist`);
   mssg.reply({
     embed: embedModels(
       "general",
-      "Error!!",
+      "Command invalid",
       `${dmOrNot(mssg)} \n\n type _help to find commands`
     ),
   });
