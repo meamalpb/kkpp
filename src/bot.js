@@ -1,7 +1,5 @@
 const Discord = require("discord.js");
-const client = new Discord.Client({
-  ws: { intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES"] },
-});
+const client = new Discord.Client();
 require("dotenv").config();
 
 const mssgParser = require("./messages/mssgParser");
