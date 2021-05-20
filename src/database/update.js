@@ -1,6 +1,6 @@
 const users = require("./model");
-const districts = require("../districts");
-const dmOrNot = require("../messages/helper/dmOrNot");
+const districts = require("../data/districts");
+const dmOrNot = require("../messages/formatting/dmOrNot");
 
 const update = {
   //function to update a district

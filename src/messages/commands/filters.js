@@ -1,12 +1,14 @@
-const fetchApi = require("../helper/fetchApi");
-const districts = require("../../districts");
+const fetch = require("../../api/fetch");
+const districts = require("../../data/districts");
 const age = ["18-45", "Above 45"];
 const update = require("../../database/update");
-const makechannel = require("../helper/makechannel");
+const makeChannel = require("../../channel/makeChannel");
+
+//function to handle commands dealing with filters like district, pin and age group
 filters = async (cmd, arg, mssg, client) => {
   if (cmd === "district") {
     //fetching district list
-    let data = await fetchApi(
+    let data = await fetch(
       "https://cdn-api.co-vin.in/api/v2/admin/location/districts/17",
       mssg
     );
@@ -46,10 +48,10 @@ filters = async (cmd, arg, mssg, client) => {
       if (i > 0) {
         console.log("exists");
       } else {
-        //makechannel(client, mssg, data[j].district_name);
+        //makeChannel(client, mssg, data[j].district_name);
       }
     }
-    makechannel(client, mssg, "hello");
+    makeChannel(client, mssg, "hello");
     for (i = 0; i < data.length; i++) {
       //find selected district
       if (data[i].district_name === districts[arg - 1]) {

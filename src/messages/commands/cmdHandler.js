@@ -1,10 +1,10 @@
-const embedModels = require("./embedModels");
-const filters = require("./commands/filters");
-const menu = require("./commands/menu");
-const checkfilter = require("./commands/checkfilter");
-const dmOrNot = require("./helper/dmOrNot");
-const users = require("../database/model");
-const insert = require("../database/insert");
+const embedModels = require("../formatting/embedModels");
+const filters = require("./filters");
+const menu = require("./menu");
+const slots = require("./slots");
+const dmOrNot = require("../formatting/dmOrNot");
+const users = require("../../database/model");
+const insert = require("../../database/insert");
 
 cmdHandler = async (cmd, args, mssg, client) => {
   //if command is filter
@@ -108,13 +108,13 @@ cmdHandler = async (cmd, args, mssg, client) => {
       //if search is district based
       if ((cmd === "checkd") | (cmd === "checkda")) {
         const did = row.get("district_id");
-        checkfilter(mssg, cmd, did, group);
+        slots(mssg, cmd, did, group);
       }
 
       //if search ispin based
       if ((cmd === "checkp") | (cmd === "checkpa")) {
         const pin = row.get("pin");
-        checkfilter(mssg, cmd, pin, group);
+        slots(mssg, cmd, pin, group);
       }
       return;
     }

@@ -1,5 +1,4 @@
 const axios = require("axios");
-const embedModels = require("../embedModels");
 
 getInfo = async (api, mssg) => {
   try {

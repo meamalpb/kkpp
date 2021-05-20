@@ -1,6 +1,6 @@
-const districts = require("../../districts");
-const embedModels = require("../embedModels");
-const dmOrNot = require("../helper/dmOrNot");
+const districts = require("../../data/districts");
+const embedModels = require("../formatting/embedModels");
+const dmOrNot = require("../formatting/dmOrNot");
 
 menu = (mssg, client) => {
   let desc = "\n";
