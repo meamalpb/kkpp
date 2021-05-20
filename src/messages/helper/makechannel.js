@@ -20,12 +20,16 @@ makeChannel = (client, message, name) => {
       type: "text",
     })
     .then((channel) => {
-      console.log(channel.name);
+      let category = message.guild.channels.cache.find((c) => {
+        value = c.name === "notification" && c.type === "category";
+        return value;
+      });
+      if (!category) throw new Error("Category channel does not exist");
+      channel.setParent(category.id);
+      console.log(`${channel.name} channel created`);
     })
     .catch((err) => {
       console.log("error is" + err);
     });
-
-  console.log("mm");
 };
 module.exports = makeChannel;

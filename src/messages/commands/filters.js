@@ -28,10 +28,14 @@ filters = async (cmd, arg, mssg, client) => {
     data = data.districts;
     for (var j = 0; j < data.length; j++) {
       var channels = mssg.guild.channels.cache.filter((channel) => {
-        const value =
-          channel.deleted == false &&
-          channel.type === "text" &&
-          channel.name === data[j].district_name.toLowerCase();
+        let value = false;
+        if (channel.parent != null) {
+          value =
+            channel.deleted == false &&
+            channel.type === "text" &&
+            channel.name === data[j].district_name.toLowerCase() &&
+            channel.parent.name === "notification";
+        }
         return value;
       });
       var i = 0;
@@ -42,10 +46,10 @@ filters = async (cmd, arg, mssg, client) => {
       if (i > 0) {
         console.log("exists");
       } else {
-        makechannel(client, mssg, data[j].district_name);
+        //makechannel(client, mssg, data[j].district_name);
       }
     }
-
+    makechannel(client, mssg, "hello");
     for (i = 0; i < data.length; i++) {
       //find selected district
       if (data[i].district_name === districts[arg - 1]) {
