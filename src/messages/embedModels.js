@@ -41,14 +41,6 @@ embedModels = (type, title, desc) => {
     };
   }
 
-  //check result model
-  else if (type === "check") {
-    return {
-      title: "Vaccination centerfor the weeks this week :",
-      description: `${desc}`,
-    };
-  }
-
   //general message model
   else if (type === "general") {
     return {

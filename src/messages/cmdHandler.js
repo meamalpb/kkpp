@@ -28,7 +28,7 @@ cmdHandler = async (cmd, args, mssg, client) => {
   }
 
   //if command is to print menu
-  else if (cmd === "menu") {
+  if (cmd === "menu") {
     if (!args.length) {
       menu(mssg, client);
       return;
@@ -47,7 +47,7 @@ cmdHandler = async (cmd, args, mssg, client) => {
   }
 
   //if command = districts | age group | pincode
-  else if ((cmd === "district") | (cmd === "pin") | (cmd === "group")) {
+  if ((cmd === "district") | (cmd === "pin") | (cmd === "group")) {
     // if more than 1 arg is provided
     if ((args.length > 1) | (args.length < 1)) {
       console.log(`${mssg.author.id} : arguments invalid for command - ${cmd}`);
@@ -89,41 +89,33 @@ cmdHandler = async (cmd, args, mssg, client) => {
     }
   }
 
-  //command to search for available slots based on district
-  else if (cmd === "checkd" || cmd === "checkda") {
+  //command to search for available slots
+  if (
+    (cmd === "checkd") |
+    (cmd === "checkda") |
+    (cmd === "checkp") |
+    (cmd === "checkpa")
+  ) {
+    //fetch user from database
     const row = await users.findOne({
       where: { username: mssg.author.id },
     });
+
     //if user exists
     if (row) {
-      const did = row.get("district_id");
       const group = row.get("age_group");
-      checkfilter(mssg, cmd, did, group);
-      return;
-    }
 
-    //if user is not registered
-    console.log(`${mssg.author.id} : user not registered`);
-    mssg.reply({
-      embed: embedModels(
-        "general",
-        "User not registered",
-        `${dmOrNot(mssg)}\n\nUse command : _register`
-      ),
-    });
-    return;
-  }
+      //if search is district based
+      if ((cmd === "checkd") | (cmd === "checkda")) {
+        const did = row.get("district_id");
+        checkfilter(mssg, cmd, did, group);
+      }
 
-  //command to search for slots based on pin
-  else if (cmd === "checkp" || cmd === "checkpa") {
-    const row = await users.findOne({
-      where: { username: mssg.author.id },
-    });
-    //if user exists
-    if (row) {
-      const pin = row.get("pin");
-      const group = row.get("age_group");
-      checkfilter(mssg, cmd, pin, group);
+      //if search ispin based
+      if ((cmd === "checkp") | (cmd === "checkpa")) {
+        const pin = row.get("pin");
+        checkfilter(mssg, cmd, pin, group);
+      }
       return;
     }
 

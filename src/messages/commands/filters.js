@@ -10,7 +10,20 @@ filters = async (cmd, arg, mssg) => {
       "https://cdn-api.co-vin.in/api/v2/admin/location/districts/17",
       mssg
     );
-    if (!data) return;
+
+    //if error
+    if (!data) {
+      //replying with error
+      mssg.reply({
+        embed: embedModels(
+          "general",
+          "Server Error",
+          `${dmOrNot(mssg)} \n\nUnable to fetch from API `
+        ),
+      });
+
+      return;
+    }
     console.log(`${mssg.author.id} : fetched districts list from API`);
     data = data.districts;
     for (i = 0; i < data.length; i++) {
