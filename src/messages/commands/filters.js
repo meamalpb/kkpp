@@ -2,8 +2,8 @@ const fetchApi = require("../helper/fetchApi");
 const districts = require("../../districts");
 const age = ["18-45", "Above 45"];
 const update = require("../../database/update");
-
-filters = async (cmd, arg, mssg) => {
+const makechannel = require("../helper/makechannel");
+filters = async (cmd, arg, mssg, client) => {
   if (cmd === "district") {
     //fetching district list
     let data = await fetchApi(
@@ -26,6 +26,30 @@ filters = async (cmd, arg, mssg) => {
     }
     console.log(`${mssg.author.id} : fetched districts list from API`);
     data = data.districts;
+    for (var j = 0; j < data.length; j++) {
+      var channels = mssg.guild.channels.cache.filter((channel) => {
+        let value = false;
+        if (channel.parent != null) {
+          value =
+            channel.deleted == false &&
+            channel.type === "text" &&
+            channel.name === data[j].district_name.toLowerCase() &&
+            channel.parent.name === "notification";
+        }
+        return value;
+      });
+      var i = 0;
+      channels.every((ch) => {
+        i++;
+        return true;
+      });
+      if (i > 0) {
+        console.log("exists");
+      } else {
+        //makechannel(client, mssg, data[j].district_name);
+      }
+    }
+    makechannel(client, mssg, "hello");
     for (i = 0; i < data.length; i++) {
       //find selected district
       if (data[i].district_name === districts[arg - 1]) {

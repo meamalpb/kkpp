@@ -61,19 +61,19 @@ cmdHandler = async (cmd, args, mssg, client) => {
 
     //if arg gives a valid district
     if ((cmd === "district") & (arg > 0) & (arg < 15)) {
-      filters(cmd, arg, mssg);
+      filters(cmd, arg, mssg, client);
       return;
     }
 
     //if arg gives a valid age group
     if ((cmd === "group") & (arg > 0) & (arg < 3)) {
-      filters(cmd, arg, mssg);
+      filters(cmd, arg, mssg, client);
       return;
     }
 
     //if arg gives a valid pincode
     if ((cmd === "pin") & (args[0].length === 6)) {
-      filters(cmd, args[0], mssg);
+      filters(cmd, args[0], mssg, client);
       return;
     }
 
