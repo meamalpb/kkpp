@@ -1,6 +1,7 @@
 const connection = require("./connection");
 const sequelize = require("sequelize");
 
+//database model
 const users = connection.define("users", {
   username: {
     type: sequelize.STRING,
