@@ -1,9 +1,9 @@
-const fetchApi = require("../helper/fetchApi");
-const day = require("../../today");
-const checkData = require("../helper/checkData");
+const fetch = require("../../api/fetch");
+const day = require("../formatting/today");
+const centerData = require("../formatting/centerData");
 
 //function for check commands
-checkfilter = async (mssg, cmd, id, age) => {
+slots = async (mssg, cmd, id, age) => {
   //get today's date
   const today = new Date();
   const date = day(today);
@@ -11,7 +11,7 @@ checkfilter = async (mssg, cmd, id, age) => {
 
   //if check is district based
   if (cmd === "checkd" || cmd === "checkda") {
-    data = await fetchApi(
+    data = await fetch(
       `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${id}&date=${date}`,
       mssg
     );
@@ -19,7 +19,7 @@ checkfilter = async (mssg, cmd, id, age) => {
 
   //if check is pincode based
   if (cmd === "checkp" || cmd === "checkpa") {
-    data = await fetchApi(
+    data = await fetch(
       `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=${id}&date=${date}`,
       mssg
     );
@@ -47,7 +47,7 @@ checkfilter = async (mssg, cmd, id, age) => {
 
   //if age is not needed
   if ((cmd === "checkd") | (cmd === "checkp")) {
-    checkData(mssg, today, data, 0);
+    centerData(mssg, today, data, 0);
     return;
   }
 
@@ -55,7 +55,7 @@ checkfilter = async (mssg, cmd, id, age) => {
   let limit = 18;
   if (age === "Above 45") limit = 45;
   if ((age === "18-45") | (age === "Above 45"))
-    checkData(mssg, today, data, limit);
+    centerData(mssg, today, data, limit);
   else
     mssg.reply({
       embed: embedModels(
@@ -66,4 +66,4 @@ checkfilter = async (mssg, cmd, id, age) => {
     });
   return;
 };
-module.exports = checkfilter;
+module.exports = slots;

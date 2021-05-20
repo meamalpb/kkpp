@@ -1,4 +1,6 @@
 const Discord = require("discord.js");
+
+//function to make a channel
 makeChannel = (client, message, name) => {
   // const guild = new Discord.Guild(client, { hello: 1 });
   /*guild.channels
