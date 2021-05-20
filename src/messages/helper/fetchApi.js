@@ -18,15 +18,6 @@ getInfo = async (api, mssg) => {
   } catch (e) {
     //error printed
     console.log(`${mssg.author.id} : ${e}`);
-
-    //replying with error
-    mssg.reply({
-      embed: embedModels(
-        "general",
-        "Server Error",
-        `${dmOrNot(mssg)} \n\nUnable to fetch from API `
-      ),
-    });
     return new Promise((resolve) => {
       resolve(false);
     });
