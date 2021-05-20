@@ -1,18 +1,30 @@
 const fetchApi = require("../helper/fetchApi");
 const districts = require("../../districts");
-const users = require("../../database/model");
-const embedModels = require("../embedModels");
 const age = ["18-45", "Above 45"];
-const dmOrNot = require("../helper/dmOrNot");
-const insert = require("../../database/insert");
 const update = require("../../database/update");
 const makechannel = require("../helper/makechannel");
 filters = async (cmd, arg, mssg, client) => {
   if (cmd === "district") {
     //fetching district list
     let data = await fetchApi(
-      "https://cdn-api.co-vin.in/api/v2/admin/location/districts/17"
+      "https://cdn-api.co-vin.in/api/v2/admin/location/districts/17",
+      mssg
     );
+
+    //if error
+    if (!data) {
+      //replying with error
+      mssg.reply({
+        embed: embedModels(
+          "general",
+          "Server Error",
+          `${dmOrNot(mssg)} \n\nUnable to fetch from API `
+        ),
+      });
+
+      return;
+    }
+    console.log(`${mssg.author.id} : fetched districts list from API`);
     data = data.districts;
     for (var j = 0; j < data.length; j++) {
       var channels = mssg.guild.channels.cache.filter((channel) => {
@@ -41,9 +53,8 @@ filters = async (cmd, arg, mssg, client) => {
         const dname = data[i].district_name;
         const uid = mssg.author.id;
 
-        let res = await update.update_district(did, dname, uid, mssg, arg);
-        console.log(res);
-        if (res instanceof Error) console.log(res.name);
+        //update database
+        await update.update_district(did, dname, uid, mssg, arg);
         return;
       }
     }
@@ -54,19 +65,19 @@ filters = async (cmd, arg, mssg, client) => {
     const uid = mssg.author.id;
     const agegroup = age[arg - 1];
 
-    let res = await update.update_group(uid, agegroup, mssg);
-    if (res instanceof Error) console.log(res.name);
+    //update database
+    await update.update_group(uid, agegroup, mssg);
     return;
   }
 
   if (cmd === "pin") {
     const uid = mssg.author.id;
 
-    let res = await update.update_pin(uid, mssg, arg);
-    if (res instanceof Error) console.log(res.name);
+    //update database
+    await update.update_pin(uid, mssg, arg);
     return;
   }
-  console.log(e);
+
   return;
 };
 
