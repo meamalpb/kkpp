@@ -16,7 +16,7 @@ client.on("ready", async () => {
   console.log(`${client.user.tag} is ready`);
 });
 
-hello = async () => {
+setTimeout(async () => {
   let districtList = await axios.get(districtListApi, {
     headers: {
       "User-Agent":
@@ -38,10 +38,14 @@ hello = async () => {
     );
 
     newInfo.push(districtInfo.data);
-    centers(day(date), districtInfo.data, client);
+    centers(
+      day(date),
+      districtInfo.data,
+      client,
+      districtList[i].district_name
+    );
   }
   console.log("done");
-};
-hello();
+}, 15000);
 //});
 client.login(process.env.BOT_TOKEN);
