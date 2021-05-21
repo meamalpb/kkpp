@@ -5,7 +5,7 @@ require("dotenv").config();
 const mssgParser = require("./messages/mssgParser");
 const cmdHandler = require("./messages/commands/cmdHandler");
 const users = require("./database/model");
-
+const display = require("./displaychnnel");
 //runs when client is ready
 client.on("ready", async () => {
   console.log(`${client.user.tag} is ready`);
@@ -19,6 +19,8 @@ client.on("message", async (message) => {
   [cmd, args] = mssgParser(message);
   if (cmd) {
     cmdHandler(cmd, args, message, client);
+  } else if (message.content === "hellothrissurrr") {
+    display(client, message.content);
   }
 });
 
