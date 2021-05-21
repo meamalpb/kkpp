@@ -25,8 +25,19 @@ display = (client, messag, channl, j) => {
               console.log("error is" + err);
             });
         }
+
+        channel.send({
+          embed: embedModels(
+            "general",
+            `Available Vaccination centres`,
+            messag
+          ),
+        });
+      } else {
+        channel.send({
+          embed: embedModels("general", `Continued`, messag),
+        });
       }
-      channel.send({ embed: embedModels("general", `Continued`, messag) });
     })
     .catch((err) => {
       console.log("error");

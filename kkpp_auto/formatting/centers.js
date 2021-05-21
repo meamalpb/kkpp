@@ -1,6 +1,6 @@
 const display = require("../../src/channel/displaychnnel");
 
-centers = (today, data, client) => {
+centers = (today, data, client, district) => {
   console.log("reached");
   let descArr = [];
   let count = 0;
@@ -54,10 +54,11 @@ centers = (today, data, client) => {
 
   console.log(descArr[0]);
   //replying with centers
-  const district = data.centers[0].district_name.toLowerCase();
+  console.log(district);
+  district = district.toLowerCase();
   var j = 1;
 
-  display(client, `\n${descArr[i]}`, district, j);
+  display(client, `\n${descArr[0]}`, district, j);
 
   if (descArr.length > 1) {
     //if there is a splitting
