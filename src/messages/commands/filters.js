@@ -66,16 +66,6 @@ filters = async (cmd, arg, mssg, client) => {
     }
   }
 
-  //else if group is selected
-  if (cmd === "group") {
-    const uid = mssg.author.id;
-    const agegroup = age[arg - 1];
-
-    //update database
-    await update.update_group(uid, agegroup, mssg);
-    return;
-  }
-
   if (cmd === "pin") {
     const uid = mssg.author.id;
 

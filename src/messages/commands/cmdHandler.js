@@ -1,13 +1,32 @@
 const embedModels = require("../formatting/embedModels");
 const filters = require("./filters");
-const menu = require("./menu");
+const list = require("./list");
 const slots = require("./slots");
 const dmOrNot = require("../formatting/dmOrNot");
 const users = require("../../database/model");
 const insert = require("../../database/insert");
 
+const isNumber = (num) => {
+  for (let i = 0; i < num.length; i++) {
+    if (!Number.isInteger(parseInt(num[i]))) return false;
+  }
+  return true;
+};
+
+//function that uses embedModels for invalid arguments.
+const InvalidArgs = (mssg, desc) => {
+  mssg.reply({
+    embed: embedModels(
+      "general",
+      "Invalid arguments",
+      `${dmOrNot(mssg)}\n\n${desc}`
+    ),
+  });
+  return;
+};
+
 cmdHandler = async (cmd, args, mssg, client) => {
-  //if command is filter
+  //if command is register
   if (cmd === "register") {
     //if there are no args
     if (!args.length) {
@@ -20,53 +39,45 @@ cmdHandler = async (cmd, args, mssg, client) => {
       console.log(
         `${mssg.author.id} : args are not allowed with command - ${cmd}`
       );
-      mssg.reply({
-        embed: embedModels("general", "Invalid arguments", `${dmOrNot(mssg)}`),
-      });
+      InvalidArgs(mssg, `Arguments are not allowed.\nUse command : _help`);
       return;
     }
   }
 
-  //if command is to print menu
-  if (cmd === "menu") {
-    if (!args.length) {
-      menu(mssg, client);
-      return;
-    }
-
-    //if args are present
-    else {
-      console.log(
-        `${mssg.author.id} : args are not allowed with command - ${cmd}`
-      );
-      mssg.reply({
-        embed: embedModels("general", "Invalid arguments", `${dmOrNot(mssg)}`),
-      });
-      return;
-    }
+  //if command is help
+  if (cmd === "help") {
+    mssg.reply({
+      embed: embedModels("help", "", `${dmOrNot(mssg)}\n\n`),
+    });
+    return;
   }
 
-  //if command = districts | age group | pincode
-  if ((cmd === "district") | (cmd === "pin") | (cmd === "group")) {
+  //if command = district | pin
+  if ((cmd === "district") | (cmd === "pin")) {
     // if more than 1 arg is provided
-    if ((args.length > 1) | (args.length < 1)) {
+    if (args.length > 1) {
       console.log(`${mssg.author.id} : arguments invalid for command - ${cmd}`);
-      mssg.reply({
-        embed: embedModels("general", "Invalid arguments", `${dmOrNot(mssg)}`),
-      });
+      InvalidArgs(mssg, `Only 1 argument allowed.\nUse command : _help`);
+      return;
+    }
+
+    //if no arguments with district, display district list
+    if ((cmd === "district") & (args.length === 0)) {
+      list(mssg);
       return;
     }
 
     let arg = parseInt(args[0]);
 
-    //if arg gives a valid district
-    if ((cmd === "district") & (arg > 0) & (arg < 15)) {
-      filters(cmd, arg, mssg, client);
+    //if arg is faulty
+    if (!isNumber(args[0])) {
+      console.log(`${mssg.author.id} : arguments invalid for command - ${cmd}`);
+      InvalidArgs(mssg, `Argument is faulty.\nUse command : _help`);
       return;
     }
 
-    //if arg gives a valid age group
-    if ((cmd === "group") & (arg > 0) & (arg < 3)) {
+    //if arg gives a valid district
+    if ((cmd === "district") & (arg > 0) & (arg < 15)) {
       filters(cmd, arg, mssg, client);
       return;
     }
@@ -78,24 +89,15 @@ cmdHandler = async (cmd, args, mssg, client) => {
     }
 
     //if arg is faulty
-    else {
-      console.log(
-        `${mssg.author.id} : arguments are invalid for command - ${cmd}`
-      );
-      mssg.reply({
-        embed: embedModels("general", "Invalid arguments", `${dmOrNot(mssg)}`),
-      });
-      return;
-    }
+    console.log(
+      `${mssg.author.id} : arguments are invalid for command - ${cmd}`
+    );
+    InvalidArgs(mssg, `Argument is faulty.\nUse command : _help`);
+    return;
   }
 
   //command to search for available slots
-  if (
-    (cmd === "checkd") |
-    (cmd === "checkda") |
-    (cmd === "checkp") |
-    (cmd === "checkpa")
-  ) {
+  if (cmd === "check") {
     //fetch user from database
     const row = await users.findOne({
       where: { username: mssg.author.id },
@@ -103,19 +105,53 @@ cmdHandler = async (cmd, args, mssg, client) => {
 
     //if user exists
     if (row) {
-      const group = row.get("age_group");
+      //if there are either 1 or 2 arguments
+      if ((args.length === 1) | (args.length === 2)) {
+        //if search is district without age
+        if ((args[0] === "d") | (args[0] === "p")) {
+          const did = row.get("district_id");
+          const pin = row.get("pin");
 
-      //if search is district based
-      if ((cmd === "checkd") | (cmd === "checkda")) {
-        const did = row.get("district_id");
-        slots(mssg, cmd, did, group);
+          let criteria = 0;
+          if (args[0] === "d") criteria = did;
+          else if (args[0] === "p") criteria = pin;
+
+          //if only 1 argument
+          if (args.length === 1) {
+            slots(mssg, args[0], criteria, -1);
+            return;
+          }
+
+          //if 2 arguments
+          else if (args.length === 2) {
+            let age = parseInt(args[1]);
+            if (!isNumber(args[1])) {
+              //invalid age
+              console.log(
+                `${mssg.author.id} : invalid age for command - ${cmd}`
+              );
+              InvalidArgs(mssg, `Age is invalid.\nUse command : _help`);
+              return;
+            }
+            slots(mssg, args[0], criteria, age);
+            return;
+          }
+          return;
+        }
+
+        console.log(
+          `${mssg.author.id} : Only 'd' or 'p' allowed as first argument for command: ${cmd}`
+        );
+        InvalidArgs(
+          mssg,
+          `Only 'd' or 'p' allowed as first argument.\nUse command : _help`
+        );
+        return;
       }
 
-      //if search ispin based
-      if ((cmd === "checkp") | (cmd === "checkpa")) {
-        const pin = row.get("pin");
-        slots(mssg, cmd, pin, group);
-      }
+      //args are faulty
+      console.log(`${mssg.author.id} : arguments invalid for command - ${cmd}`);
+      InvalidArgs(mssg, `Use command : _help`);
       return;
     }
 
@@ -137,7 +173,7 @@ cmdHandler = async (cmd, args, mssg, client) => {
     embed: embedModels(
       "general",
       "Command invalid",
-      `${dmOrNot(mssg)} \n\n type _help to find commands`
+      `${dmOrNot(mssg)} \n\nUse command : _help`
     ),
   });
   return;

@@ -13,7 +13,7 @@ centerData = (mssg, today, data, limit) => {
 
   //loop for 7 days of the week
   for (let i = 0; i < 7; i++) {
-    desc = `${desc} \n\n ${formatDate(today)}\n\n`;
+    desc = `${desc} \n\n **${formatDate(today)}**\n\n`;
 
     //looping through each center a day
     for (let j = 0; j < data.centers.length; j++) {
@@ -22,14 +22,18 @@ centerData = (mssg, today, data, limit) => {
         //search by date
         if (data.centers[j].sessions[k].date === formatDate(today)) {
           //using age if age is used as filter, else ignored
-          if ((data.centers[j].sessions[k].min_age_limit === limit) | !limit) {
+          if (
+            (data.centers[j].sessions[k].min_age_limit === limit) |
+            (limit < 0)
+          ) {
             const name = data.centers[j].name;
             const block = data.centers[j].block_name;
             const time = data.centers[j].from + " - " + data.centers[j].to;
             const vaccine = data.centers[j].sessions[k].vaccine;
+            let age = data.centers[j].sessions[k].min_age_limit;
             const dose1 = data.centers[j].sessions[k].available_capacity_dose1;
             const dose2 = data.centers[j].sessions[k].available_capacity_dose2;
-            nextDesc = `\n${name}\n${block}\nTime : ${time}\n${vaccine}\nDose-1 Availability : ${dose1}\nDose-2 Availability : ${dose2}\n`;
+            nextDesc = `\n${name.toUpperCase()}\n${block}\n${vaccine}\nAge : ${age}+\nTime : ${time}\nDose-1 : ${dose1}\nDose-2 : ${dose2}\n`;
             count += nextDesc.length;
             flag = 1;
 

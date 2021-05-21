@@ -53,51 +53,6 @@ const update = {
     });
   },
 
-  //function to update age group
-  update_group: async (uid, agegroup, mssg) => {
-    try {
-      const rows = await users.update(
-        { age_group: agegroup },
-        { where: { username: uid } }
-      );
-
-      // if data updated
-      if (rows > 0) {
-        mssg.reply({
-          embed: embedModels(
-            "general",
-            `Updated age group : ${agegroup}`,
-            `${dmOrNot(mssg)}`
-          ),
-        });
-      }
-
-      //if user is not registered
-      else {
-        mssg.reply({
-          embed: embedModels(
-            "general",
-            `User not Registered`,
-            `${dmOrNot(mssg)} \n\n use command : _register`
-          ),
-        });
-      }
-    } catch (e) {
-      //if error
-      console.log(`${mssg.author.id} : ${e}`);
-      mssg.reply({
-        embed: embedModels(
-          "general",
-          `Server Error`,
-          `${dmOrNot(mssg)} \n\n Unable to update age group`
-        ),
-      });
-    }
-    return new Promise((resolve) => {
-      resolve();
-    });
-  },
-
   //function to update pin
   update_pin: async (uid, mssg, arg) => {
     try {
