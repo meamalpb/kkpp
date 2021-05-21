@@ -1,6 +1,6 @@
 const users = require("./model");
-const districts = require("../districts");
-const dmOrNot = require("../messages/helper/dmOrNot");
+const districts = require("../data/districts");
+const dmOrNot = require("../messages/formatting/dmOrNot");
 
 const update = {
   //function to update a district
@@ -48,51 +48,6 @@ const update = {
     }
 
     //return a promise
-    return new Promise((resolve) => {
-      resolve();
-    });
-  },
-
-  //function to update age group
-  update_group: async (uid, agegroup, mssg) => {
-    try {
-      const rows = await users.update(
-        { age_group: agegroup },
-        { where: { username: uid } }
-      );
-
-      // if data updated
-      if (rows > 0) {
-        mssg.reply({
-          embed: embedModels(
-            "general",
-            `Updated age group : ${agegroup}`,
-            `${dmOrNot(mssg)}`
-          ),
-        });
-      }
-
-      //if user is not registered
-      else {
-        mssg.reply({
-          embed: embedModels(
-            "general",
-            `User not Registered`,
-            `${dmOrNot(mssg)} \n\n use command : _register`
-          ),
-        });
-      }
-    } catch (e) {
-      //if error
-      console.log(`${mssg.author.id} : ${e}`);
-      mssg.reply({
-        embed: embedModels(
-          "general",
-          `Server Error`,
-          `${dmOrNot(mssg)} \n\n Unable to update age group`
-        ),
-      });
-    }
     return new Promise((resolve) => {
       resolve();
     });

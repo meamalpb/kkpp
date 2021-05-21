@@ -3,7 +3,7 @@ const client = new Discord.Client();
 require("dotenv").config();
 
 const mssgParser = require("./messages/mssgParser");
-const cmdHandler = require("./messages/cmdHandler");
+const cmdHandler = require("./messages/commands/cmdHandler");
 const users = require("./database/model");
 const display = require("./displaychnnel");
 //runs when client is ready

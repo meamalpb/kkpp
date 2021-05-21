@@ -1,5 +1,5 @@
 const users = require("./model");
-const embedModels = require("../messages/embedModels");
+const embedModels = require("../messages/formatting/embedModels");
 
 //function to insert user to a database
 insert = async (mssg) => {
