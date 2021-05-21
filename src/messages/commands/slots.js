@@ -3,14 +3,30 @@ const day = require("../formatting/today");
 const centerData = require("../formatting/centerData");
 
 //function for check commands
-slots = async (mssg, cmd, id, age) => {
+slots = async (mssg, arg, id, age) => {
   //get today's date
   const today = new Date();
   const date = day(today);
   let data = "";
 
+  if ((age < 18) & (age >= 0)) {
+    console.log(
+      `${mssg.author.id} : Vaccination for this age group hasnt started`
+    );
+    //replying with error
+    mssg.reply({
+      embed: embedModels(
+        "general",
+        "Vaccination not available",
+        `${dmOrNot(mssg)} \n\nVaccination for this age group hasnt started`
+      ),
+    });
+
+    return;
+  }
+
   //if check is district based
-  if (cmd === "checkd" || cmd === "checkda") {
+  if (arg === "d") {
     data = await fetch(
       `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${id}&date=${date}`,
       mssg
@@ -18,7 +34,7 @@ slots = async (mssg, cmd, id, age) => {
   }
 
   //if check is pincode based
-  if (cmd === "checkp" || cmd === "checkpa") {
+  if (arg === "p") {
     data = await fetch(
       `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=${id}&date=${date}`,
       mssg
@@ -28,9 +44,12 @@ slots = async (mssg, cmd, id, age) => {
   //if error
   if (!data) {
     let filter = "";
-    if ((cmd === "checkd") | (cmd === "checkda")) filter = "district";
-    if ((cmd === "checkp") | (cmd === "checkpa")) filter = "pincode";
+    if (arg === "d") filter = "district";
+    if (arg === "p") filter = "pincode";
 
+    console.log(
+      `${mssg.author.id} : unable to fetch from API. Try updating ${filter}`
+    );
     //replying with error
     mssg.reply({
       embed: embedModels(
@@ -46,24 +65,18 @@ slots = async (mssg, cmd, id, age) => {
   console.log(`${mssg.author.id} : fetched available centers from API`);
 
   //if age is not needed
-  if ((cmd === "checkd") | (cmd === "checkp")) {
-    centerData(mssg, today, data, 0);
+  if (age < 0) {
+    centerData(mssg, today, data, age);
     return;
   }
 
   //if age is needed
-  let limit = 18;
-  if (age === "Above 45") limit = 45;
-  if ((age === "18-45") | (age === "Above 45"))
-    centerData(mssg, today, data, limit);
-  else
-    mssg.reply({
-      embed: embedModels(
-        "general",
-        "Update Age group",
-        `${dmOrNot(mssg)} \n\nUse command : _group 1 | _group 2`
-      ),
-    });
-  return;
+  if (age < 0) limit = -1;
+  else if ((age >= 18) & (age < 45)) limit = 18;
+  else if (age >= 45) limit = 45;
+
+  console.log(limit);
+
+  centerData(mssg, today, data, limit);
 };
 module.exports = slots;

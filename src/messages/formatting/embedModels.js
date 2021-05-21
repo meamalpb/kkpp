@@ -1,5 +1,5 @@
 embedModels = (type, title, desc) => {
-  //district menu message model
+  //district list message model
   if (type === "district") {
     return {
       title: "District List",
@@ -13,31 +13,38 @@ embedModels = (type, title, desc) => {
     };
   }
 
-  //age_group menu message model
-  else if (type === "age") {
+  //help message model
+  else if (type === "help") {
     return {
-      title: "Age Groups",
-      description: `${desc}`,
-      fields: [
-        {
-          name: "command",
-          value: "_group 1 | _group 2 ...",
-        },
-      ],
-    };
-  }
-
-  //pincode menu message model
-  else if (type === "pin") {
-    return {
-      title: "PIN",
-      description: `${desc}`,
-      fields: [
-        {
-          name: "command",
-          value: "_pin 000001 | _pin 020001 | _pin 603451 .......",
-        },
-      ],
+      title: "KKPP Commands",
+      description: `${desc} \n**_register**
+      Register to database
+      
+      \n**_district**
+      Displays list of districts
+      
+      \n**_district [district number]**
+      Takes 1 argument which is a number 1-14
+      Updates your district
+      Get district_number from district list.
+      Ex : _district 7
+      
+      \n**_pin [pin code]**
+      Takes 1 argument which is 6 digit number
+      Updates your pin code
+      Ex : _pin 605012
+      
+      \n**_check ['d' / 'p']**
+      display available centers without using age as filter
+      'd' displays centers using your selected district
+      'p' displays centers using your selected pincode 
+      Ex : _check d
+      
+      \n**check ['d' / 'p'] [age]**
+      display available centers using age as filter
+      'd' displays centers using your selected district
+      'p' displays centers using your selected pincode
+      Ex : _check p 35`,
     };
   }
 
