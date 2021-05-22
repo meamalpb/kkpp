@@ -2,7 +2,7 @@ const embedModels = require("../messages/formatting/embedModels");
 
 display = async (client, descArr, district) => {
   //find channel to display message
-  let value = false;
+  let value;
   let channel = client.channels.cache.find((channel) => {
     if (channel.parent != null) {
       value =
@@ -10,8 +10,12 @@ display = async (client, descArr, district) => {
     }
     return value;
   });
-  if (value == false) {
+
+  if (value === false) {
+    console.log(`channel ${district} doesn't exist`);
+    return;
   }
+
   //fetch all messages from the channel
   let messages;
   try {
