@@ -2,15 +2,16 @@ const embedModels = require("../messages/formatting/embedModels");
 
 display = async (client, descArr, district) => {
   //find channel to display message
+  let value = false;
   let channel = client.channels.cache.find((channel) => {
-    value = false;
     if (channel.parent != null) {
       value =
         channel.name === district && channel.parent.name === "notification";
     }
     return value;
   });
-
+  if (value == false) {
+  }
   //fetch all messages from the channel
   let messages;
   try {

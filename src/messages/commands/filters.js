@@ -1,7 +1,6 @@
 const fetch = require("../../api/fetch");
 const districts = require("../../data/districts");
 const update = require("../../database/update");
-const makeChannel = require("../../channel/makeChannel");
 
 //function to handle commands dealing with filters like district, pin and age group
 filters = async (cmd, arg, mssg, client) => {
@@ -27,30 +26,7 @@ filters = async (cmd, arg, mssg, client) => {
     }
     console.log(`${mssg.author.id} : fetched districts list from API`);
     data = data.districts;
-    for (var j = 0; j < data.length; j++) {
-      var channels = mssg.guild.channels.cache.filter((channel) => {
-        let value = false;
-        if (channel.parent != null) {
-          value =
-            channel.deleted == false &&
-            channel.type === "text" &&
-            channel.name === data[j].district_name.toLowerCase() &&
-            channel.parent.name === "notification";
-        }
-        return value;
-      });
-      var i = 0;
-      channels.every((ch) => {
-        i++;
-        return true;
-      });
-      if (i > 0) {
-        console.log("exists");
-      } else {
-        //makeChannel(client, mssg, data[j].district_name);
-      }
-    }
-    makeChannel(client, mssg, "hello");
+
     for (i = 0; i < data.length; i++) {
       //find selected district
       if (data[i].district_name === districts[arg - 1]) {
