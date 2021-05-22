@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon ./src/bot.js",
-    "auto": "nodemon ./kkpp_auto/index.js"
+    "auto": "nodemon ./src/auto/index.js"
   },
   "repository": {
     "type": "git",

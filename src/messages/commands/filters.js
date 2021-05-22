@@ -1,6 +1,5 @@
 const fetch = require("../../api/fetch");
 const districts = require("../../data/districts");
-const age = ["18-45", "Above 45"];
 const update = require("../../database/update");
 const makeChannel = require("../../channel/makeChannel");
 
