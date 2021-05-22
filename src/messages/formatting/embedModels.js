@@ -17,7 +17,13 @@ embedModels = (type, title, desc) => {
   else if (type === "help") {
     return {
       title: "KKPP Commands",
-      description: `${desc} \n**_register**
+      description: `${desc}\n**_setup**
+      Setup the bot
+      Only admin can use this command
+      Not allowed in DM channel
+      Creates required channels and job roles 
+      
+      \n**_register**
       Register to database
       
       \n**_district**
@@ -35,13 +41,13 @@ embedModels = (type, title, desc) => {
       Ex : _pin 605012
       
       \n**_check ['d' / 'p']**
-      display available centers without using age as filter
+      Display available centers without using age
       'd' displays centers using your selected district
       'p' displays centers using your selected pincode 
       Ex : _check d
       
       \n**check ['d' / 'p'] [age]**
-      display available centers using age as filter
+      Display available centers using age as filter
       'd' displays centers using your selected district
       'p' displays centers using your selected pincode
       Ex : _check p 35`,
