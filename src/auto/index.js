@@ -20,7 +20,7 @@ client.on("ready", async () => {
   console.log(`${client.user.tag} is ready`);
 
   //schedule task every 2 mins
-  cron.schedule("*/2 * * * *", async () => {
+  cron.schedule("*/1 * * * *", async () => {
     console.log("\n\nrunning script");
 
     //fetching district list
@@ -64,19 +64,28 @@ client.on("ready", async () => {
 
     //finding if updates are needed
     //if old list and new list have different number of elements
-    if (oldList.length !== newList.length) {
-      updates = newList;
+    if (oldList.length === newList.length) {
+      for (let i = 0; i < newList.length; i++)
+        //if corresponding district info are the same
+        if (JSON.stringify(oldList[i]) === JSON.stringify(newList[i])) {
+          continue;
+        }
+        //if corresponding district info are different
+        else {
+          updates.push(newList[i]);
+        }
     }
     //if both old list and newlist are of the same length
     else {
-      for (let i = 0; i < newList.length; i++)
-        if (oldList[i] !== newList[i]) updates.push(newList[i]);
+      updates = newList;
     }
 
     //printing only updated districts
     for (let i = 0; i < updates.length; i++) {
       await centerData(updates[i], client);
     }
+
+    console.log(updates);
 
     //updating old list
     oldList = newList;
