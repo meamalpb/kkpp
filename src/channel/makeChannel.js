@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 
 //function to make a channel
-makeChannel = (client, message, name) => {
+makeChannel = (client, name, message) => {
   message.guild.channels
     .create(name, {
       type: "text",

@@ -4,7 +4,6 @@ display = async (client, descArr, district) => {
   //find channel to display message
   let value;
   let channel = client.channels.cache.find((channel) => {
-    value = false;
     if (channel.parent != null) {
       value =
         channel.name === district && channel.parent.name === "notification";

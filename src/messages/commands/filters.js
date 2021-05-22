@@ -1,7 +1,6 @@
 const fetch = require("../../api/fetch");
 const districts = require("../../data/districts");
 const update = require("../../database/update");
-const makeChannel = require("../../channel/makeChannel");
 
 //function to handle commands dealing with filters like district, pin and age group
 filters = async (cmd, arg, mssg, client) => {

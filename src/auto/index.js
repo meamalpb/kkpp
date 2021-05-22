@@ -3,7 +3,7 @@ const client = new Discord.Client();
 require("dotenv").config();
 const axios = require("axios");
 const cron = require("node-cron");
-
+const makechannel = require("../channel/makeChannel");
 const districtListApi = `https://cdn-api.co-vin.in/api/v2/admin/location/districts/17`;
 const districtApi = `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=`;
 const formatDate = require("../messages/formatting/today");
