@@ -22,22 +22,10 @@ client.on("message", async (message) => {
   console.log(`${message.author.id} : ${message.content}`);
   [cmd, args] = mssgParser(message);
 
-  //only help can run before setup
-  if (cmd === "help") {
-    cmdHandler(cmd, args, message, client);
-    return;
-  }
+  if (!cmd) return;
 
-  //setup needs to run first, hence flag must be greater than 0 for other commands
-  if ((flag != 0) | (message.channel.type === "dm")) {
-    //if dm channel
-    if (cmd != "setup") {
-      cmdHandler(cmd, args, message, client);
-      return;
-    }
-
-    //if setup is sent as dm
-    else if (message.channel.type === "dm") {
+  if (message.channel.type === "dm") {
+    if (cmd === "setup") {
       message.reply({
         embed: embedModels(
           "general",
@@ -45,60 +33,14 @@ client.on("message", async (message) => {
           `${dmOrNot(message)} \n\nCommand cant be used as DM`
         ),
       });
+      return;
     }
-
+    flag = cmdHandler(cmd, args, message, client, 1);
     return;
   }
 
-  //if setup is called
-  if (cmd === "setup") {
-    //if no arguments
-    if (args.length === 0) {
-      //if admin
-      if (message.member.hasPermission("ADMINISTRATOR")) {
-        flag = 1;
-        setup(client, message);
-      }
-      //not an admin
-      else {
-        message.reply({
-          embed: embedModels(
-            "general",
-            "No permission",
-            `${dmOrNot(message)} \n\nCommand reserved for admin`
-          ),
-        });
-      }
-    }
-    //if there are arguments
-    else {
-      message.reply({
-        embed: embedModels(
-          "general",
-          "Invalid Command",
-          `${dmOrNot(
-            message
-          )} \n\nNo arguments are allowed\nUse command : _help`
-        ),
-      });
-    }
-    //not an admin
-    return;
-  }
-
-  //some other command before _setup
-  else if (cmd) {
-    message.reply({
-      embed: embedModels(
-        "general",
-        "Bot not setup",
-        `${dmOrNot(
-          message
-        )} \n\nAdmin needs to set up the bot.\n Use command : _setup`
-      ),
-    });
-    return;
-  }
+  flag = cmdHandler(cmd, args, message, client, flag);
+  return;
 });
 
 //keeps the bot online using the BOT_TOKEN

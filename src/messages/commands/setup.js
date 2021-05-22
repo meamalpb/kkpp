@@ -95,7 +95,7 @@ setup = async (client, message) => {
   }
 
   //reply after process is completed
-  console.log(`${message.author.id} :setup complete`);
+  console.log(`${message.author.id} : setup complete`);
   message.reply({
     embed: embedModels("general", "Setup complete", `${dmOrNot(message)}`),
   });
