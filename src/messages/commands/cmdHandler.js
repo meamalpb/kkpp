@@ -25,22 +25,34 @@ const InvalidArgs = (mssg, desc) => {
   return;
 };
 
-cmdHandler = async (cmd, args, mssg, client) => {
-  //if command is register
-  if (cmd === "register") {
-    //if there are no args
-    if (!args.length) {
-      await insert(mssg);
-      return;
+cmdHandler = async (cmd, args, mssg, client, flag) => {
+  //if command is setup
+  if (cmd === "setup") {
+    if (args.length === 0) {
+      //if admin
+      if (mssg.member.hasPermission("ADMINISTRATOR")) {
+        flag = 1;
+        setup(client, mssg);
+        return 1;
+      }
+
+      //not an admin
+      else {
+        mssg.reply({
+          embed: embedModels(
+            "general",
+            "No permission",
+            `${dmOrNot(mssg)} \n\nCommand reserved for admin`
+          ),
+        });
+        return flag;
+      }
     }
 
-    //if args are present
+    //if there are arguments
     else {
-      console.log(
-        `${mssg.author.id} : args are not allowed with command - ${cmd}`
-      );
-      InvalidArgs(mssg, `Arguments are not allowed.\nUse command : _help`);
-      return;
+      InvalidArgs(`No arguments are allowed\nUse command : _help`);
+      return flag;
     }
   }
 
@@ -49,7 +61,39 @@ cmdHandler = async (cmd, args, mssg, client) => {
     mssg.reply({
       embed: embedModels("help", "", `${dmOrNot(mssg)}\n\n`),
     });
-    return;
+    return flag;
+  }
+
+  //setup has to be done first
+  if (flag === 0) {
+    mssg.reply({
+      embed: embedModels(
+        "general",
+        "Bot not setup",
+        `${dmOrNot(
+          mssg
+        )} \n\nAdmin needs to set up the bot.\n Use command : _setup`
+      ),
+    });
+    return flag;
+  }
+
+  //if command is register
+  if (cmd === "register") {
+    //if there are no args
+    if (!args.length) {
+      await insert(mssg);
+      return 1;
+    }
+
+    //if args are present
+    else {
+      console.log(
+        `${mssg.author.id} : args are not allowed with command - ${cmd}`
+      );
+      InvalidArgs(mssg, `Arguments are not allowed.\nUse command : _help`);
+      return 1;
+    }
   }
 
   //if command = district | pin
@@ -58,13 +102,13 @@ cmdHandler = async (cmd, args, mssg, client) => {
     if (args.length > 1) {
       console.log(`${mssg.author.id} : arguments invalid for command - ${cmd}`);
       InvalidArgs(mssg, `Only 1 argument allowed.\nUse command : _help`);
-      return;
+      return 1;
     }
 
     //if no arguments with district, display district list
     if ((cmd === "district") & (args.length === 0)) {
       list(mssg);
-      return;
+      return 1;
     }
 
     let arg = parseInt(args[0]);
@@ -73,19 +117,19 @@ cmdHandler = async (cmd, args, mssg, client) => {
     if (!isNumber(args[0])) {
       console.log(`${mssg.author.id} : arguments invalid for command - ${cmd}`);
       InvalidArgs(mssg, `Argument is faulty.\nUse command : _help`);
-      return;
+      return 1;
     }
 
     //if arg gives a valid district
     if ((cmd === "district") & (arg > 0) & (arg < 15)) {
       filters(cmd, arg, mssg, client);
-      return;
+      return 1;
     }
 
     //if arg gives a valid pincode
     if ((cmd === "pin") & (args[0].length === 6)) {
       filters(cmd, args[0], mssg, client);
-      return;
+      return 1;
     }
 
     //if arg is faulty
@@ -93,7 +137,7 @@ cmdHandler = async (cmd, args, mssg, client) => {
       `${mssg.author.id} : arguments are invalid for command - ${cmd}`
     );
     InvalidArgs(mssg, `Argument is faulty.\nUse command : _help`);
-    return;
+    return 1;
   }
 
   //command to search for available slots
@@ -119,7 +163,7 @@ cmdHandler = async (cmd, args, mssg, client) => {
           //if only 1 argument
           if (args.length === 1) {
             slots(mssg, args[0], criteria, -1);
-            return;
+            return 1;
           }
 
           //if 2 arguments
@@ -131,12 +175,12 @@ cmdHandler = async (cmd, args, mssg, client) => {
                 `${mssg.author.id} : invalid age for command - ${cmd}`
               );
               InvalidArgs(mssg, `Age is invalid.\nUse command : _help`);
-              return;
+              return 1;
             }
             slots(mssg, args[0], criteria, age);
-            return;
+            return 1;
           }
-          return;
+          return 1;
         }
 
         console.log(
@@ -146,13 +190,13 @@ cmdHandler = async (cmd, args, mssg, client) => {
           mssg,
           `Only 'd' or 'p' allowed as first argument.\nUse command : _help`
         );
-        return;
+        return 1;
       }
 
       //args are faulty
       console.log(`${mssg.author.id} : arguments invalid for command - ${cmd}`);
       InvalidArgs(mssg, `Use command : _help`);
-      return;
+      return 1;
     }
 
     //if user is not registered
@@ -164,7 +208,7 @@ cmdHandler = async (cmd, args, mssg, client) => {
         `${dmOrNot(mssg)}\n\nUse command : _register`
       ),
     });
-    return;
+    return 1;
   }
 
   //if no such command exists
@@ -176,7 +220,7 @@ cmdHandler = async (cmd, args, mssg, client) => {
       `${dmOrNot(mssg)} \n\nUse command : _help`
     ),
   });
-  return;
+  return 1;
 };
 
 module.exports = cmdHandler;
