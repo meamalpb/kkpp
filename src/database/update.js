@@ -35,6 +35,7 @@ const update = {
             VIEW_CHANNEL: false,
           });
         }
+
         //update query
         rows = await users.update(
           { district: dname, district_id: did },

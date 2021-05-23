@@ -58,7 +58,7 @@ centerData = async (data, client) => {
     if (count > 0) descArr.push(desc);
   }
   //print description to corresponding channel
-  await display(client, descArr, data.district.toLowerCase());
+  display(client, descArr, data.district.toLowerCase());
 };
 
 module.exports = centerData;
