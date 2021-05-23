@@ -6,20 +6,66 @@ const update = {
   //function to update a district
   update_district: async (did, dname, uid, mssg, arg) => {
     try {
-      //update query
-      const rows = await users.update(
-        { district: dname, district_id: did },
-        { where: { username: uid } }
-      );
+      let rows = await users.findOne({
+        where: { username: mssg.author.id },
+      });
 
       // if data updated
-      if (rows > 0) {
+      if (rows) {
+        let existingDistrict = rows.get("district");
+
+        //if there is an existing district
+        if (existingDistrict) {
+          //find channels having existing districtname
+          let channels = mssg.guild.channels.cache.filter((channel) => {
+            let value = false;
+            if (channel.parent != null) {
+              value =
+                channel.deleted == false &&
+                channel.type === "text" &&
+                channel.name === existingDistrict.toLowerCase() &&
+                channel.parent.name === "notification";
+            }
+            return value;
+          });
+
+          //remove permissions of existing channel
+          let channel = channels.first();
+          channel.updateOverwrite(mssg.author.id, {
+            VIEW_CHANNEL: false,
+          });
+        }
+        //update query
+        rows = await users.update(
+          { district: dname, district_id: did },
+          { where: { username: uid } }
+        );
+
         mssg.reply({
           embed: embedModels(
             "general",
             `Updated district : ${districts[arg - 1]}`,
             `${dmOrNot(mssg)}`
           ),
+        });
+
+        //find channels having new district name
+        channels = mssg.guild.channels.cache.filter((channel) => {
+          let value = false;
+          if (channel.parent != null) {
+            value =
+              channel.deleted == false &&
+              channel.type === "text" &&
+              channel.name === dname.toLowerCase() &&
+              channel.parent.name === "notification";
+          }
+          return value;
+        });
+
+        //add permissions for updated district
+        channel = channels.first();
+        channel.updateOverwrite(mssg.author.id, {
+          VIEW_CHANNEL: true,
         });
         console.log(`${mssg.author.id} : updated district to ${dname}`);
       }

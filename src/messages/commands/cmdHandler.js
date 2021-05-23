@@ -96,6 +96,12 @@ cmdHandler = async (cmd, args, mssg, client) => {
       return;
     }
 
+    if ((cmd === "pin") & (args.length === 0)) {
+      console.log(`${mssg.author.id} : arguments invalid for command - ${cmd}`);
+      InvalidArgs(mssg, `Argument is faulty.\nUse command : _help`);
+      return;
+    }
+
     let arg = parseInt(args[0]);
 
     //if arg is faulty

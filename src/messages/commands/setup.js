@@ -87,7 +87,7 @@ setup = async (client, message) => {
 
     //make channel
     else {
-      makeChannel(client, data[j].district_name, message);
+      await makeChannel(client, data[j].district_name, message);
       console.log(
         `${message.author.id} : channel ${data[j].district_name} created`
       );

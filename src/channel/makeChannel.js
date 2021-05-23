@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 
 //function to make a channel
-makeChannel = (client, name, message) => {
+makeChannel = async (client, name, message) => {
   message.guild.channels
     .create(name, {
       type: "text",
@@ -12,8 +12,25 @@ makeChannel = (client, name, message) => {
         return value;
       });
       if (!category) throw new Error("Category channel does not exist");
+
       channel.setParent(category.id);
-      console.log(`${channel.name} channel created`);
+
+      try {
+        channel.updateOverwrite(client.user.id, {
+          SEND_MESSAGES: true,
+          VIEW_CHANNEL: true,
+        });
+        channel.updateOverwrite(client.user.id, {
+          SEND_MESSAGES: true,
+          VIEW_CHANNEL: true,
+        });
+        channel.updateOverwrite(channel.guild.roles.everyone, {
+          SEND_MESSAGES: false,
+          VIEW_CHANNEL: false,
+        });
+      } catch (e) {
+        console.log(`{message.author.id : ${e.name}`);
+      }
     })
     .catch((err) => {
       console.log("error is" + err);
