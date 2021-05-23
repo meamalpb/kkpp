@@ -7,13 +7,11 @@ const mssgParser = require("./messages/mssgParser");
 const cmdHandler = require("./messages/commands/cmdHandler");
 const users = require("./database/model");
 const setup = require("./messages/commands/setup");
-let flag;
 
 //runs when client is ready
 client.on("ready", async () => {
   console.log(`${client.user.tag} is ready`);
   users.sync();
-  flag = 0;
 });
 
 //runs on user input
@@ -35,11 +33,11 @@ client.on("message", async (message) => {
       });
       return;
     }
-    flag = cmdHandler(cmd, args, message, client, 1);
+    cmdHandler(cmd, args, message, client);
     return;
   }
 
-  flag = cmdHandler(cmd, args, message, client, flag);
+  cmdHandler(cmd, args, message, client);
   return;
 });
 
