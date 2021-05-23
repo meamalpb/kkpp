@@ -2,7 +2,7 @@ const embedModels = require("../messages/formatting/embedModels");
 
 display = async (client, descArr, district) => {
   //find channel to display message
-  let value;
+  let value = false;
   let channel = client.channels.cache.find((channel) => {
     if (channel.parent != null) {
       value =
@@ -25,7 +25,6 @@ display = async (client, descArr, district) => {
       console.log(`${e.name} - unable to fetch messages from ${channel.name}`);
   }
 
-  let res;
   //delete all messages in the channel
   try {
     let size = messages.size;
