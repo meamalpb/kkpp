@@ -3,7 +3,7 @@ const districts = require("../../data/districts");
 const update = require("../../database/update");
 
 //function to handle commands dealing with filters like district, pin and age group
-filters = async (cmd, arg, mssg, client) => {
+filters = async (cmd, arg, mssg) => {
   if (cmd === "district") {
     //fetching district list
     let data = await fetch(

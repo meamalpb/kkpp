@@ -23,11 +23,16 @@ client.on("message", async (message) => {
   if (!cmd) return;
 
   if (message.channel.type === "dm") {
-    if (cmd === "setup") {
+    if (
+      (cmd === "setup") |
+      (cmd === "cleanup") |
+      (cmd === "sync") |
+      (cmd === "desync")
+    ) {
       message.reply({
         embed: embedModels(
           "general",
-          "Invalid command",
+          "Command not permitted",
           `${dmOrNot(message)} \n\nCommand cant be used as DM`
         ),
       });

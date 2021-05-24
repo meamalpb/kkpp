@@ -26,27 +26,34 @@ centerData = (mssg, today, data, limit) => {
             (data.centers[j].sessions[k].min_age_limit === limit) |
             (limit < 0)
           ) {
-            const name = data.centers[j].name;
-            const block = data.centers[j].block_name;
-            const time = data.centers[j].from + " - " + data.centers[j].to;
-            const vaccine = data.centers[j].sessions[k].vaccine;
-            let age = data.centers[j].sessions[k].min_age_limit;
-            const dose1 = data.centers[j].sessions[k].available_capacity_dose1;
-            const dose2 = data.centers[j].sessions[k].available_capacity_dose2;
-            nextDesc = `\n${name.toUpperCase()}\n${block}\n${vaccine}\nAge : ${age}+\nTime : ${time}\nDose-1 : ${dose1}\nDose-2 : ${dose2}\n`;
-            count += nextDesc.length;
-            flag = 1;
+            if (
+              (data.centers[j].sessions[k].available_capacity_dose1 !== 0) |
+              (data.centers[j].sessions[k].available_capacity_dose2 !== 0)
+            ) {
+              const name = data.centers[j].name;
+              const block = data.centers[j].block_name;
+              const time = data.centers[j].from + " - " + data.centers[j].to;
+              const vaccine = data.centers[j].sessions[k].vaccine;
+              let age = data.centers[j].sessions[k].min_age_limit;
+              const dose1 =
+                data.centers[j].sessions[k].available_capacity_dose1;
+              const dose2 =
+                data.centers[j].sessions[k].available_capacity_dose2;
+              nextDesc = `\n${name.toUpperCase()}\n${block}\n${vaccine}\nAge : ${age}+\nTime : ${time}\nDose-1 : ${dose1}\nDose-2 : ${dose2}\n`;
+              count += nextDesc.length;
+              flag = 1;
 
-            //if nextDesc can be included
-            if (count <= 1800) {
-              desc = `${desc}${nextDesc}`;
-            }
+              //if nextDesc can be included
+              if (count <= 1800) {
+                desc = `${desc}${nextDesc}`;
+              }
 
-            //if nextDesc cannot be included
-            else {
-              descArr.push(desc);
-              desc = nextDesc;
-              count = nextDesc.length;
+              //if nextDesc cannot be included
+              else {
+                descArr.push(desc);
+                desc = nextDesc;
+                count = nextDesc.length;
+              }
             }
           }
         }

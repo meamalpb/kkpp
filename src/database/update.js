@@ -24,16 +24,18 @@ const update = {
                 channel.deleted == false &&
                 channel.type === "text" &&
                 channel.name === existingDistrict.toLowerCase() &&
-                channel.parent.name === "notification";
+                channel.parent.name === "kkpp-notification";
             }
             return value;
           });
 
           //remove permissions of existing channel
-          let channel = channels.first();
-          channel.updateOverwrite(mssg.author.id, {
-            VIEW_CHANNEL: false,
-          });
+          if (channels) {
+            let channel = channels.first();
+            channel.updateOverwrite(mssg.author.id, {
+              VIEW_CHANNEL: false,
+            });
+          }
         }
 
         //update query
@@ -58,16 +60,18 @@ const update = {
               channel.deleted == false &&
               channel.type === "text" &&
               channel.name === dname.toLowerCase() &&
-              channel.parent.name === "notification";
+              channel.parent.name === "kkpp-notification";
           }
           return value;
         });
 
         //add permissions for updated district
-        channel = channels.first();
-        channel.updateOverwrite(mssg.author.id, {
-          VIEW_CHANNEL: true,
-        });
+        if (channels) {
+          channel = channels.first();
+          channel.updateOverwrite(mssg.author.id, {
+            VIEW_CHANNEL: true,
+          });
+        }
         console.log(`${mssg.author.id} : updated district to ${dname}`);
       }
 
