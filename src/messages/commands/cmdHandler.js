@@ -5,6 +5,8 @@ const slots = require("./slots");
 const dmOrNot = require("../formatting/dmOrNot");
 const users = require("../../database/model");
 const insert = require("../../database/insert");
+const setup = require("./setup");
+const cleanup = require("./cleanup");
 
 const isNumber = (num) => {
   for (let i = 0; i < num.length; i++) {
@@ -25,13 +27,40 @@ const InvalidArgs = (mssg, desc) => {
   return;
 };
 
+//command is sync or desync
 cmdHandler = async (cmd, args, mssg, client) => {
-  //if command is setup
-  if (cmd === "setup") {
+  if ((cmd === "sync") | (cmd === "desync")) {
     if (args.length === 0) {
       //if admin
       if (mssg.member.hasPermission("ADMINISTRATOR")) {
-        setup(client, mssg);
+        return;
+      }
+      //if not admin
+      else {
+        mssg.reply({
+          embed: embedModels(
+            "general",
+            "No permission",
+            `${dmOrNot(mssg)}\n\n Command reserved for admin`
+          ),
+        });
+        return;
+      }
+    }
+    //invalid args
+    else {
+      InvalidArgs(mssg, `No arguments are allowed\nUse command : _help`);
+    }
+    return;
+  }
+
+  //if command is setup
+  if ((cmd === "setup") | (cmd === "cleanup")) {
+    if (args.length === 0) {
+      //if admin
+      if (mssg.member.hasPermission("ADMINISTRATOR")) {
+        if (cmd === "setup") setup(client, mssg);
+        else if (cmd === "cleanup") cleanup(client, mssg);
         return;
       }
 
@@ -113,13 +142,13 @@ cmdHandler = async (cmd, args, mssg, client) => {
 
     //if arg gives a valid district
     if ((cmd === "district") & (arg > 0) & (arg < 15)) {
-      filters(cmd, arg, mssg, client);
+      filters(cmd, arg, mssg);
       return;
     }
 
     //if arg gives a valid pincode
     if ((cmd === "pin") & (args[0].length === 6)) {
-      filters(cmd, args[0], mssg, client);
+      filters(cmd, args[0], mssg);
       return;
     }
 

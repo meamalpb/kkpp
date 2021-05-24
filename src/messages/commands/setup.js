@@ -27,38 +27,38 @@ setup = async (client, message) => {
   console.log(`${message.author.id} : fetched districts list from API`);
   data = data.districts;
 
-  //find all categories with name "notification"
+  //find all categories with name "kkpp-notification"
   let categories = message.guild.channels.cache.filter((category) => {
     value =
       category.deleted === false &&
       category.type === "category" &&
-      category.name === "notification";
+      category.name === "kkpp-notification";
     return value;
   });
 
   //count no of categories
   let k = 0;
-  categories.every((ch) => {
+  categories.every((category) => {
     k++;
     return true;
   });
 
-  //to check if notification category exists
+  //to check if kkpp-notification category exists
   if (k > 0) {
-    console.log(`${message.author.id} : category notification exists`);
+    console.log(`${message.author.id} : category kkpp-notification exists`);
   }
 
-  //else create notification category
+  //else create kkpp-notification category
   else {
-    message.guild.channels.create("notification", {
+    message.guild.channels.create("kkpp-notification", {
       type: "category",
     });
-    console.log(`${message.author.id} : category notification created`);
+    console.log(`${message.author.id} : category kkpp-notification created`);
   }
 
   //iterate through districtList
   for (let j = 0; j < data.length; j++) {
-    //find collection of channels with the district name data[j].district_name and unde category "notification"
+    //find collection of channels with the district name data[j].district_name and unde category "kkpp-notification"
     let channels = message.guild.channels.cache.filter((channel) => {
       let value = false;
       if (channel.parent != null) {
@@ -66,7 +66,7 @@ setup = async (client, message) => {
           channel.deleted == false &&
           channel.type === "text" &&
           channel.name === data[j].district_name.toLowerCase() &&
-          channel.parent.name === "notification";
+          channel.parent.name === "kkpp-notification";
       }
       return value;
     });

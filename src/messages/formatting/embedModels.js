@@ -17,11 +17,23 @@ embedModels = (type, title, desc) => {
   else if (type === "help") {
     return {
       title: "KKPP Commands",
-      description: `${desc}\n**_setup**
-      Setup the bot
-      Only admin can use this command
-      Not allowed in DM channel
-      Creates required channels and job roles 
+      description: `${desc}
+      __**ADMIN ONLY (CAN'T DM)**__
+      \n\n**_setup**
+      Set up for automatic updates
+      Set up required channels & permissions 
+
+      \n**_cleanup**
+      Delete all channels created by _setup
+
+      \n**_sync**
+      Refreshes / begins automatic updates
+
+      \n**_desync**
+      Stops automatic updates
+      
+      
+      __**@EVERYONE**__
       
       \n**_register**
       Register to database

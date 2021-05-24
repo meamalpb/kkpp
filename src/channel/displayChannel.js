@@ -6,7 +6,8 @@ display = async (client, descArr, district) => {
   let channel = client.channels.cache.find((channel) => {
     if (channel.parent != null) {
       value =
-        channel.name === district && channel.parent.name === "notification";
+        channel.name === district &&
+        channel.parent.name === "kkpp-notification";
     }
     return value;
   });
@@ -37,11 +38,7 @@ display = async (client, descArr, district) => {
 
   //replying with centers
   channel.send({
-    embed: embedModels(
-      "general",
-      `Available vaccination centers`,
-      `\n${descArr[0]}`
-    ),
+    embed: embedModels("general", `All vaccination centers`, `\n${descArr[0]}`),
   });
 
   if (descArr.length > 1) {

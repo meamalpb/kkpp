@@ -1,12 +1,12 @@
 //function to make a channel
-makeChannel = async (client, name, message) => {
+deleteChannel = async (client, name, message) => {
   message.guild.channels
     .create(name, {
       type: "text",
     })
     .then((channel) => {
       let category = message.guild.channels.cache.find((c) => {
-        value = c.name === "kkpp-notification" && c.type === "category";
+        value = c.name === "notification" && c.type === "category";
         return value;
       });
       if (!category) throw new Error("Category channel does not exist");
@@ -33,9 +33,5 @@ makeChannel = async (client, name, message) => {
     .catch((err) => {
       console.log("error is" + err);
     });
-
-  return new Promise((resolve) => {
-    resolve(true);
-  });
 };
-module.exports = makeChannel;
+module.exports = deleteChannel;
