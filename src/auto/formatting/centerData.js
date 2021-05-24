@@ -9,8 +9,10 @@ centerData = async (data, client) => {
   let flag = 0;
   let nextDesc = "";
 
+  let sortedCenters = [...data.centers];
+
   //sort centers by name
-  data.centers.sort((a, b) => {
+  sortedCenters.sort((a, b) => {
     if (a.name > b.name) return 1;
     else if (b.name > a.name) return -1;
     return 0;
@@ -21,18 +23,18 @@ centerData = async (data, client) => {
     desc = `${desc} \n\n:loudspeaker: **${formatDate(today)}**\n\n`;
 
     //looping through each center a day
-    for (let j = 0; j < data.centers.length; j++) {
+    for (let j = 0; j < sortedCenters.length; j++) {
       //looping through each session
-      for (let k = 0; k < data.centers[j].sessions.length; k++) {
+      for (let k = 0; k < sortedCenters[j].sessions.length; k++) {
         //search by date
-        if (data.centers[j].sessions[k].date === formatDate(today)) {
-          const name = data.centers[j].name;
-          const block = data.centers[j].block_name;
-          const time = data.centers[j].from + " - " + data.centers[j].to;
-          const vaccine = data.centers[j].sessions[k].vaccine;
-          let age = data.centers[j].sessions[k].min_age_limit;
-          const dose1 = data.centers[j].sessions[k].available_capacity_dose1;
-          const dose2 = data.centers[j].sessions[k].available_capacity_dose2;
+        if (sortedCenters[j].sessions[k].date === formatDate(today)) {
+          const name = sortedCenters[j].name;
+          const block = sortedCenters[j].block_name;
+          const time = sortedCenters[j].from + " - " + sortedCenters[j].to;
+          const vaccine = sortedCenters[j].sessions[k].vaccine;
+          let age = sortedCenters[j].sessions[k].min_age_limit;
+          const dose1 = sortedCenters[j].sessions[k].available_capacity_dose1;
+          const dose2 = sortedCenters[j].sessions[k].available_capacity_dose2;
           nextDesc = `\n${name.toUpperCase()}\n${block}\n${vaccine}\nAge : ${age}+\nTime : ${time}\nDose-1 : ${dose1}\nDose-2 : ${dose2}\n`;
           count += nextDesc.length;
           flag = 1;

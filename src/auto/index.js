@@ -23,6 +23,7 @@ client.on("ready", async () => {
   console.log(`${client.user.tag} is ready`);
 });
 
+///function that runs for a message
 client.on("message", async (message) => {
   if (!message.author.bot) {
     if (message.channel.type === "dm") {
@@ -30,102 +31,87 @@ client.on("message", async (message) => {
     }
     if (message.content.trim() === "_sync") {
       if (message.member.hasPermission("ADMINISTRATOR")) {
-        //message as dm
-        if (message.channel.type === "dm") {
-          return;
-        }
+        console.log("script started");
+        message.reply({
+          embed: embedModels(
+            "general",
+            "Fetching recent",
+            `${dmOrNot(
+              message
+            )}\n\n Updates being fetched\n Hope _setup has been run.`
+          ),
+        });
 
-        //not dm
-        else {
-          console.log("script started");
-          message.reply({
-            embed: embedModels(
-              "general",
-              "Fetching recent",
-              `${dmOrNot(
-                message
-              )}\n\n Updates being fetched\n Hope _setup has been run.`
-            ),
-          });
-          if (task !== "") task.stop();
-          oldList = [];
+        //task to run - schedule task every 2 mins
+        task = cron.schedule("*/1 * * * *", async () => {
+          //updating old list
+          oldList = newList;
+          newList = [];
           updates = [];
+          console.log("\n\nrunning script");
+          //fetching district list
+          try {
+            districtList = await fetch(districtListApi, {
+              headers: {
+                "User-Agent":
+                  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:89.0) Gecko/20100101 Firefox/89.0",
+              },
+            });
+            console.log("fetched district list");
+            districtList = districtList.districts;
+          } catch (e) {
+            console.log(`${e.name} - auto : unable to fetch district list`);
+          }
 
-          //task to run - schedule task every 2 mins
-          task = cron.schedule("*/2 * * * *", async () => {
-            console.log("\n\nrunning script");
-            //fetching district list
+          //iterating through district list
+          for (let i = 0; i < districtList.length; i++) {
             try {
-              districtList = await fetch(districtListApi, {
-                headers: {
-                  "User-Agent":
-                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:89.0) Gecko/20100101 Firefox/89.0",
-                },
-              });
-              console.log("fetched district list");
-              districtList = districtList.districts;
+              //fetching each districts availability
+              let districtInfo = await axios.get(
+                `${districtApi}${districtList[i].district_id}&date=${formatDate(
+                  date
+                )}`,
+                {
+                  headers: {
+                    "User-Agent":
+                      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:89.0) Gecko/20100101 Firefox/89.0",
+                  },
+                }
+              );
+              console.log(
+                `fetched centers from ${districtList[i].district_name}`
+              );
+              districtInfo.data.district = districtList[i].district_name;
+              newList.push(districtInfo.data);
             } catch (e) {
-              console.log(`${e.name} - auto : unable to fetch district list`);
+              console.log(
+                `${e.name} - auto : unabe to fetch district ${districtList[i].district_name}`
+              );
             }
+          }
 
-            //iterating through district list
-            for (let i = 0; i < districtList.length; i++) {
-              try {
-                //fetching each districts availability
-                let districtInfo = await axios.get(
-                  `${districtApi}${
-                    districtList[i].district_id
-                  }&date=${formatDate(date)}`,
-                  {
-                    headers: {
-                      "User-Agent":
-                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:89.0) Gecko/20100101 Firefox/89.0",
-                    },
-                  }
-                );
-                console.log(
-                  `fetched centers from ${districtList[i].district_name}`
-                );
-                districtInfo.data.district = districtList[i].district_name;
-                newList.push(districtInfo.data);
-              } catch (e) {
-                console.log(
-                  `${e.name} - auto : unabe to fetch district ${districtList[i].district_name}`
-                );
+          //finding if updates are needed
+          //if old list and new list have different number of elements
+          if (oldList.length === newList.length) {
+            for (let i = 0; i < newList.length; i++) {
+              //if corresponding district info are the same
+              if (JSON.stringify(oldList[i]) !== JSON.stringify(newList[i])) {
+                updates.push(newList[i]);
               }
             }
+          }
+          //if both old list and newlist are of the same length
+          else {
+            updates = newList;
+          }
 
-            //finding if updates are needed
-            //if old list and new list have different number of elements
-            if (oldList.length === newList.length) {
-              for (let i = 0; i < newList.length; i++)
-                //if corresponding district info are the same
-                if (JSON.stringify(oldList[i]) === JSON.stringify(newList[i])) {
-                  continue;
-                }
-                //if corresponding district info are different
-                else {
-                  updates.push(newList[i]);
-                }
-            }
-            //if both old list and newlist are of the same length
-            else {
-              updates = newList;
-            }
+          //printing only updated districts
+          for (let i = 0; i < updates.length; i++) {
+            await centerData(updates[i], client);
+          }
 
-            //printing only updated districts
-            for (let i = 0; i < updates.length; i++) {
-              await centerData(updates[i], client);
-            }
-
-            console.log(updates);
-
-            //updating old list
-            oldList = newList;
-            newList = [];
-            updates = [];
-          });
-        }
+          console.log(updates);
+        });
         return;
       }
     }
