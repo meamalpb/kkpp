@@ -18,7 +18,7 @@ embedModels = (type, title, desc) => {
     return {
       title: "KKPP Commands",
       description: `${desc}
-      __**ADMIN ONLY (CAN'T DM)**__
+      **ADMIN ONLY (CAN'T DM)**
       \n\n**_setup**
       Set up for automatic updates
       Set up required channels & permissions 
@@ -33,7 +33,7 @@ embedModels = (type, title, desc) => {
       Stops automatic updates
       
       
-      __**@EVERYONE**__
+      **@EVERYONE**
       
       \n**_register**
       Register to database
@@ -54,14 +54,14 @@ embedModels = (type, title, desc) => {
       
       \n**_check ['d' / 'p']**
       Display available centers without using age
-      'd' displays centers using your selected district
-      'p' displays centers using your selected pincode 
+      'd' search using your selected district
+      'p' search using your selected pincode 
       Ex : _check d
       
       \n**check ['d' / 'p'] [age]**
       Display available centers using age as filter
-      'd' displays centers using your selected district
-      'p' displays centers using your selected pincode
+      'd' search using your selected district
+      'p' search using your selected pincode
       Ex : _check p 35`,
     };
   }

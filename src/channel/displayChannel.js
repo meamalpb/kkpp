@@ -38,7 +38,11 @@ display = async (client, descArr, district) => {
 
   //replying with centers
   channel.send({
-    embed: embedModels("general", `All vaccination centers`, `\n${descArr[0]}`),
+    embed: embedModels(
+      "general",
+      `All vaccination centers\n`,
+      `\n${descArr[0]}`
+    ),
   });
 
   if (descArr.length > 1) {
