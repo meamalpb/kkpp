@@ -11,9 +11,16 @@ centerData = (mssg, today, data, limit) => {
   let flag = 0;
   let nextDesc = "";
 
+  //sort centers by name
+  data.centers.sort((a, b) => {
+    if (a.name > b.name) return 1;
+    else if (b.name > a.name) return -1;
+    return 0;
+  });
+
   //loop for 7 days of the week
   for (let i = 0; i < 7; i++) {
-    desc = `${desc} \n\n **${formatDate(today)}**\n\n`;
+    desc = `${desc} \n\n :loudspeaker: **${formatDate(today)}**\n\n`;
 
     //looping through each center a day
     for (let j = 0; j < data.centers.length; j++) {
@@ -50,6 +57,7 @@ centerData = (mssg, today, data, limit) => {
 
               //if nextDesc cannot be included
               else {
+                desc = `${desc} \n\n[Kittiyal Kitti](https://www.cowin.gov.in/home) :syringe:`;
                 descArr.push(desc);
                 desc = nextDesc;
                 count = nextDesc.length;
@@ -71,7 +79,10 @@ centerData = (mssg, today, data, limit) => {
 
   //if center is available
   else {
-    if (count > 0) descArr.push(desc);
+    if (count > 0) {
+      desc = `${desc} \n\n[Kittiyal Kitti](https://www.cowin.gov.in/home) :syringe:`;
+      descArr.push(desc);
+    }
   }
 
   console.log(descArr[0]);
