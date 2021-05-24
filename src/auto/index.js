@@ -52,7 +52,7 @@ client.on("message", async (message) => {
           updates = [];
 
           //task to run - schedule task every 2 mins
-          task = cron.schedule("*/1 * * * *", async () => {
+          task = cron.schedule("*/2 * * * *", async () => {
             console.log("\n\nrunning script");
             //fetching district list
             try {
@@ -126,18 +126,6 @@ client.on("message", async (message) => {
             updates = [];
           });
         }
-        return;
-      }
-
-      //not admin
-      else {
-        message.reply({
-          embed: embedModels(
-            "general",
-            "No permission",
-            `${dmOrNot(message)}\n\n Command reserved for admin`
-          ),
-        });
         return;
       }
     }
