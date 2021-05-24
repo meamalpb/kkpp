@@ -32,9 +32,11 @@ const update = {
           //remove permissions of existing channel
           if (channels) {
             let channel = channels.first();
-            channel.updateOverwrite(mssg.author.id, {
-              VIEW_CHANNEL: false,
-            });
+            if (channel) {
+              channel.updateOverwrite(mssg.author.id, {
+                VIEW_CHANNEL: false,
+              });
+            }
           }
         }
 
@@ -68,9 +70,11 @@ const update = {
         //add permissions for updated district
         if (channels) {
           channel = channels.first();
-          channel.updateOverwrite(mssg.author.id, {
-            VIEW_CHANNEL: true,
-          });
+          if (channel) {
+            channel.updateOverwrite(mssg.author.id, {
+              VIEW_CHANNEL: true,
+            });
+          }
         }
         console.log(`${mssg.author.id} : updated district to ${dname}`);
       }
