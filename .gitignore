@@ -106,3 +106,4 @@ dist
 # Ignore the default SQLite database.
 database.sqlite
 
+bfh.pem
