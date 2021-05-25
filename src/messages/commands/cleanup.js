@@ -3,7 +3,7 @@ const dmOrNot = require("../formatting/dmOrNot");
 const embedModels = require("../formatting/embedModels");
 
 //cleanup function to initialize channel and categories
-cleanup = async (client, message) => {
+cleanup = async (message) => {
   //fetch districts list
   let data = await fetch(
     "https://cdn-api.co-vin.in/api/v2/admin/location/districts/17",
@@ -61,19 +61,14 @@ cleanup = async (client, message) => {
       });
 
       //delete channels in the category
-      channels.every(async (ch) => {
-        await ch.delete();
+      channels.every((ch) => {
+        ch.delete();
         ch.deleted = true;
         console.log(`${message.author.id} : channel ${ch.name} deleted`);
 
         return true;
       });
     }
-
-    categories.every((category) => {
-      category.delete();
-      return true;
-    });
   }
 
   //reply after process is completed
