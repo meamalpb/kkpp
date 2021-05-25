@@ -60,7 +60,7 @@ cmdHandler = async (cmd, args, mssg, client) => {
       //if admin
       if (mssg.member.hasPermission("ADMINISTRATOR")) {
         if (cmd === "setup") setup(client, mssg);
-        else if (cmd === "cleanup") cleanup(client, mssg);
+        else if (cmd === "cleanup") await cleanup(mssg);
         return;
       }
 
