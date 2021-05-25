@@ -40,7 +40,7 @@ centerData = async (data, client) => {
           flag = 1;
 
           //if nextDesc can be included
-          if (count <= 1800) {
+          if (count <= 1700) {
             desc = `${desc}${nextDesc}`;
           }
 
