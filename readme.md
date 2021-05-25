@@ -15,7 +15,7 @@ Search using district is limited to Kerala, whereas no such restriction is there
 `BFH/receGQqI18HbrFQRg/2021`
 
 ## Link to product walkthrough   
-[link to video]
+[KKPP demo](https://youtu.be/21XXuWlT6yY)
 
 ## How it Works ? 
 1. The bot must be given administrative permissions, else it may give incorrect outputs.
