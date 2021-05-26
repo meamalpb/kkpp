@@ -44,7 +44,7 @@ client.on("message", async (message) => {
               "Fetching recent",
               `${dmOrNot(
                 message
-              )}\n\n Updates being fetched\n Hope _setup has been run.`
+              )}\n\n Updates being fetched\n Hope _setup has been run.\nFetch may take 2 mins`
             ),
           });
           if (task !== "") task.stop();
@@ -121,7 +121,7 @@ client.on("message", async (message) => {
             console.log(updates);
 
             //updating old list
-            oldList = newList;
+            oldList = [...newList];
             newList = [];
             updates = [];
           });
