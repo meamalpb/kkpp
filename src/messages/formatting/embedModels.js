@@ -30,6 +30,7 @@ Set up required channels & permissions
 **_cleanup**
 Delete all channels created by _setup
 
+
 **_sync**
 Refreshes / begins automatic updates
 
